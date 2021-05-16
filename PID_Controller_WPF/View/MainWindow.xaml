@@ -1,0 +1,139 @@
+﻿<Window x:Class="PID_Controller_WPF.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PID_Controller_WPF.View"
+        xmlns:vm="clr-namespace:PID_Controller_WPF.ViewModel"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="PID Controller" 
+        MaxHeight="450" MinHeight="450" MaxWidth="800" MinWidth="800">
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
+
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding PidViewModel.SetpointUpCommand}" 
+                    Key="W" />
+        <KeyBinding Command="{Binding PidViewModel.SetpointDownCommand}" 
+                    Key="S" />
+    </Window.InputBindings>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Menu-->
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <MenuItem Header="Actions">
+            </MenuItem>
+            <MenuItem Header="Help">
+            </MenuItem>
+        </Menu>
+
+        <!--Configuration-->
+        <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="0" Grid.Row="1"/>
+        <Canvas Name="Configuration" Grid.Row="1" Grid.Column="0" >
+            <TextBlock Text="Configuration" FontSize="15" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="10" />
+
+            <!--Set point info-->
+            <TextBlock Text="Set point:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="35" />
+            <TextBlock Name="SetPoint" 
+                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Height="25" Width="100" Canvas.Left="150" Canvas.Top="35" />
+
+            <!--Integral error info-->
+            <TextBlock Text="Integral error:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="60" />
+            <TextBlock Name="IntegralError" 
+                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Height="25"  Width="100" Canvas.Left="150" Canvas.Top="60" />
+            
+            <!--Proportional gain info-->
+            <TextBlock Text="Proportional gain:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="85" />
+            <TextBlock Name="ProportionalGain" 
+                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Height="25" Width="100" Canvas.Left="150" Canvas.Top="85" />
+
+            <!--Integral gain info-->
+            <TextBlock Text="Integral gain:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="110" />
+            <TextBlock Name="IntegralGain" 
+                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Height="25" Width="100" Canvas.Left="150" Canvas.Top="110" />
+
+            <!--Dirivative gain info-->
+            <TextBlock Text="Dirivative gain:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="135" />
+            <TextBlock Name="DirivativeGain" 
+                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Height="25" Width="100" Canvas.Left="150" Canvas.Top="135" />
+
+            <!--Time info-->
+            <TextBlock Text="Time:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="160" />
+            <TextBlock Name="Time" 
+                Text="{Binding TextBlockViewModel.TimeTextBlock, Mode=TwoWay}" 
+                Height="25" Width="100"  Canvas.Left="150" Canvas.Top="160" />
+        </Canvas>
+
+        <!--Keyboard shortcuts-->
+        <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="0" Grid.Row="2"/>
+        <Canvas Name="KeyboardShortcuts" Grid.Column="0" Grid.Row="2">
+            <Label Content="Keyboard shortcuts" Canvas.Left="10" Canvas.Top="10" />
+            <Label Content="W - Increase setpoint" Canvas.Left="10" Canvas.Top="35" />
+            <Label Content="S - Decrease setpoint" Canvas.Left="10" Canvas.Top="60" />
+        </Canvas>
+
+        <!--Area around the graph-->
+        <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
+        <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="25" />
+            </Grid.ColumnDefinitions>
+
+            <Canvas Name="ProcessVariableCanvas" Grid.Row="1" Grid.Column="0">
+                <Label Name="ValueLabel" Content="Value">
+                    <Label.LayoutTransform>
+                        <RotateTransform Angle="-90" />
+                    </Label.LayoutTransform>
+                </Label>
+            </Canvas>
+
+            <Canvas Name="TimeValuesCanvas" Grid.Row="2" Grid.Column="1" >
+                <Label Name="TimeLabel" Content="Time" />
+            </Canvas>
+
+            <!--Graph canvas-->
+            <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="1" Grid.Row="1"/>
+            <Canvas Name="GraphCanvas" Grid.Row="1" Grid.Column="1" >
+                <Ellipse Width="5" Height="5" Fill="Red" x:Uid="SetpointEllipse">
+                    <Ellipse.RenderTransform>
+                        <TransformGroup>
+                            <TranslateTransform X="{Binding GraphCanvasViewModel.SetpointLeft, Mode=OneWay}" 
+                                Y="{Binding GraphCanvasViewModel.SetpointTop, Mode=OneWay}" />
+                        </TransformGroup>
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+            </Canvas>
+        </Grid>
+    </Grid>
+</Window>
