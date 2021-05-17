@@ -12,7 +12,7 @@ namespace PID_Controller_WPF.ViewModel
     public class PidViewModel
     {
         #region Members
-        public DispatcherTimer TimerGraph = null; 
+        public DispatcherTimer TimerGraph { get; private set; } = null; 
         #endregion  // Members
         
         #region Commands
@@ -24,6 +24,14 @@ namespace PID_Controller_WPF.ViewModel
         /// Command for decreasing setpoint
         /// </summary>
         public ICommand SetpointDownCommand { get; set; }
+        /// <summary>
+        /// Command used to start a timer 
+        /// </summary>
+        public ICommand StartTimerCommand { get; set; }
+        /// <summary>
+        /// Command used to stop a timer 
+        /// </summary>
+        public ICommand StopTimerCommand { get; set; }
         #endregion  // Commands
 
         #region ViewModels
@@ -34,7 +42,7 @@ namespace PID_Controller_WPF.ViewModel
         /// <summary>
         /// ViewModel for drawing a graph
         /// </summary>
-        private GraphCanvasViewModel _GraphCanvasViewModel { get; set; }
+        public GraphCanvasViewModel _GraphCanvasViewModel { get; private set; }
         #endregion  // ViewModels
 
         #region Properties 
@@ -47,22 +55,31 @@ namespace PID_Controller_WPF.ViewModel
         /// </summary>
         public PidViewModel(ref TextBlockViewModel textBlockViewModel, ref GraphCanvasViewModel graphCanvasViewModel)
         {
-            // Commands 
-            this.SetpointUpCommand = new SetpointUpCommand(this);
-            this.SetpointDownCommand = new SetpointDownCommand(this);
-
-            // ViewModels
-            this._TextBlockViewModel = textBlockViewModel;
-            this._GraphCanvasViewModel = graphCanvasViewModel;
-
-            // Add timer for updating graph and visual elements 
-            TimerGraph = new DispatcherTimer(); 
-            TimerGraph.Tick += new System.EventHandler((o, e) => 
+            try
             {
-                _GraphCanvasViewModel.Time += DelaySeconds; 
-                _TextBlockViewModel.TimeTextBlock = $"{System.Math.Round(_GraphCanvasViewModel.Time, 3)}"; 
-            }); 
-            TimerGraph.Interval = System.TimeSpan.FromSeconds(DelaySeconds);
+                // Commands 
+                this.SetpointUpCommand = new SetpointUpCommand(this);
+                this.SetpointDownCommand = new SetpointDownCommand(this);
+                this.StartTimerCommand = new StartTimerCommand(this);
+                this.StopTimerCommand = new StopTimerCommand(this);
+
+                // ViewModels
+                this._TextBlockViewModel = textBlockViewModel;
+                this._GraphCanvasViewModel = graphCanvasViewModel;
+
+                // Add timer for updating graph and visual elements 
+                TimerGraph = new DispatcherTimer(); 
+                TimerGraph.Tick += new System.EventHandler((o, e) => 
+                {
+                    _GraphCanvasViewModel.Time += DelaySeconds; 
+                    _TextBlockViewModel.TimeTextBlock = $"{System.Math.Round(_GraphCanvasViewModel.Time, 3)}"; 
+                }); 
+                TimerGraph.Interval = System.TimeSpan.FromSeconds(DelaySeconds);
+            }
+            catch (System.Exception e)
+            {
+                ExceptionViewer.WatchExceptionMessageBox(e);
+            }
         }
         #endregion  // Constructor
 
@@ -72,13 +89,6 @@ namespace PID_Controller_WPF.ViewModel
         /// </summary>
         public void ChangeSetpoint(double delta=1.0f)
         {
-            // Restart timer for drawing a graph 
-            if (TimerGraph.IsEnabled)
-            {
-                TimerGraph.Stop(); 
-            }
-            TimerGraph.Start(); 
-            
             // Set default value of setpoint 
             double setpoint = 0; 
 

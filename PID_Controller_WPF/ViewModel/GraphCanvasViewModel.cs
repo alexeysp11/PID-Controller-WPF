@@ -1,5 +1,6 @@
 using System.Collections.Generic; 
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Shapes;
 using PID_Controller_WPF.View; 
 using PID_Controller_WPF.Exceptions; 
@@ -8,11 +9,27 @@ namespace PID_Controller_WPF.ViewModel
 {
     public class GraphCanvasViewModel : INotifyPropertyChanged
     {
+        #region Members
+        public Point ReferencePoint { get; set; }
+        #endregion  // Members
+
         #region Properties
         /// <summary>
         /// List of lines that are currently on the canvas 
         /// </summary>
         private List<Line> lines = new List<Line>(); 
+        /// <summary>
+        /// Boolean variable that shows if timer for graph drawing is enabled
+        /// </summary>
+        public bool IsTimerEnabled = false; 
+        
+        private bool isEverStarted = false;
+        public bool IsEverStarted
+        {
+            get { return isEverStarted; }
+            set { isEverStarted = (!value && !isEverStarted) ? false : true; }
+        }
+        
         /// <summary>
         /// Allows to move setpoint on the graph according to 
         /// the scale of a graph 
@@ -49,11 +66,68 @@ namespace PID_Controller_WPF.ViewModel
                 line.X2 = this.SetpointLeft; 
                 line.Y2 = this.SetpointTop + 2.5; 
 
-                // Add line to the lines array 
-                lines.Add(line); 
-                
-                // Draw line 
-                MainWindow.DrawLine(line);
+                try
+                {
+                    // Correct a list of lines 
+                    if (!IsTimerEnabled)
+                    {
+                        // Assign ReferencePoint for the first time 
+                        if (IsEverStarted)
+                        {
+                            // Define logical variables 
+                            bool isAtPoint = (line.Y1 == ReferencePoint.Y) ? true : false; 
+                            bool isUpper = (line.Y1 < ReferencePoint.Y) ? true : false; 
+                            bool isLower = (line.Y1 > ReferencePoint.Y) ? true : false; 
+                            bool isGoingUp = (line.Y1 > line.Y2) ? true : false; 
+                            bool isGoingDown = (line.Y1 < line.Y2) ? true : false; 
+
+                            // Conditions for adding/removing lines from a list 
+                            if (isAtPoint)
+                            {
+                                lines.Add(line); 
+                            }
+                            else if (isUpper)
+                            {
+                                if (isGoingUp)
+                                {
+                                    lines.Add(line); 
+                                }
+                                else if (isGoingDown)
+                                {
+                                    lines.RemoveAt(lines.Count - 1); 
+                                }
+                            }
+                            else if (isLower)
+                            {
+                                if (isGoingUp)
+                                {
+                                    lines.RemoveAt(lines.Count - 1); 
+                                }
+                                else if (isGoingDown)
+                                {
+                                    lines.Add(line); 
+                                }
+                            }
+                        }
+                        else
+                        {
+                            ReferencePoint = new Point(line.X2, line.Y2);
+                            IsEverStarted = true; 
+                        }
+                    }
+                    else
+                    {
+                        lines.Add(line); 
+                    }
+                    
+                    // Draw line 
+                    MainWindow.DrawCoordinates(); 
+                    MainWindow.DrawLine(lines);
+                }
+                catch (System.Exception e)
+                {
+                    ExceptionViewer.WatchExceptionMessageBox(e); 
+                }
             }
         }
         
@@ -182,6 +256,7 @@ namespace PID_Controller_WPF.ViewModel
         #region Constructor
         public GraphCanvasViewModel()
         {
+            // Set initial values of setpoint 
             this.SetpointTop = 0.0; 
             this.SetpointLeft = 0.0; 
         }

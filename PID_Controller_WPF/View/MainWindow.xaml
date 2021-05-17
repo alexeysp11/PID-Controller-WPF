@@ -73,10 +73,10 @@
                 Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="110" />
 
-            <!--Dirivative gain info-->
-            <TextBlock Text="Dirivative gain:" Height="25" Width="100" 
+            <!--Derivative gain info-->
+            <TextBlock Text="Derivative gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="135" />
-            <TextBlock Name="DirivativeGain" 
+            <TextBlock Name="DerivativeGain" 
                 Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="135" />
 
@@ -86,6 +86,11 @@
             <TextBlock Name="Time" 
                 Text="{Binding TextBlockViewModel.TimeTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100"  Canvas.Left="150" Canvas.Top="160" />
+
+            <Button Content="Start" Command="{Binding PidViewModel.StartTimerCommand}"
+                Height="25" Width="50" Canvas.Left="25" Canvas.Top="185" />
+            <Button Content="Stop" Command="{Binding PidViewModel.StopTimerCommand}"
+                Height="25" Width="50" Canvas.Left="80" Canvas.Top="185" />
         </Canvas>
 
         <!--Keyboard shortcuts-->
