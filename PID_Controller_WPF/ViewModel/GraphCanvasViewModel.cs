@@ -30,12 +30,14 @@ namespace PID_Controller_WPF.ViewModel
             set { isEverStarted = (!value && !isEverStarted) ? false : true; }
         }
         
+        private double setpoint; 
         /// <summary>
         /// Allows to move setpoint on the graph according to 
         /// the scale of a graph 
         /// </summary>
         public double Setpoint
         {
+            get { return setpoint; } 
             set
             {
                 double min = MainWindow.MinPvGraph; 
@@ -276,7 +278,8 @@ namespace PID_Controller_WPF.ViewModel
         #region Methods
         public void ClearListOfLines()
         {
-            lines.Clear(); 
+            lines.Clear();                  // Clear list of lines
+            MainWindow.DrawCoordinates();   // Draw line 
         }
         #endregion  // Methods
     }

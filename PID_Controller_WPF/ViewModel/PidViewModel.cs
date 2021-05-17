@@ -42,7 +42,7 @@ namespace PID_Controller_WPF.ViewModel
         /// <summary>
         /// ViewModel for displaying setpoint
         /// </summary>
-        private TextBlockViewModel _TextBlockViewModel { get; set; }
+        public TextBlockViewModel _TextBlockViewModel { get; private set; }
         /// <summary>
         /// ViewModel for drawing a graph
         /// </summary>

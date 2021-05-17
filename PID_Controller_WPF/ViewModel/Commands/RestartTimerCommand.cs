@@ -6,14 +6,14 @@ using PID_Controller_WPF.Exceptions;
 
 namespace PID_Controller_WPF.Commands
 {
-    class StopTimerCommand : ICommand
+    class RestartTimerCommand : ICommand
     {
         #region Members
         private PidViewModel _PidViewModel; 
         #endregion  // Members
 
         #region Constructor
-        public StopTimerCommand(PidViewModel pidViewModel)
+        public RestartTimerCommand(PidViewModel pidViewModel)
         {
             this._PidViewModel = pidViewModel; 
         }
@@ -39,18 +39,20 @@ namespace PID_Controller_WPF.Commands
                 // Say that timer is not enabled 
                 gcvm.IsTimerEnabled = false; 
 
-                // Clear list of lines 
-                gcvm.ClearListOfLines(); 
-
                 // Set SP and time to zero 
                 MainWindow.MinTimeGraph = 0; 
                 MainWindow.MaxTimeGraph = 60; 
                 gcvm.Setpoint = 0; 
+                _PidViewModel._TextBlockViewModel.SetPointTextBlock = $"{gcvm.Setpoint}"; 
                 gcvm.Time = 0; 
+                _PidViewModel._TextBlockViewModel.TimeTextBlock = $"{gcvm.Time}";
 
                 // Set reference point to be able to change SP while timer isn't enabled
                 Point refpoint = new Point(gcvm.SetpointLeft, gcvm.SetpointTop + 2.5); 
                 gcvm.ReferencePoint = refpoint; 
+
+                // Clear list of lines 
+                gcvm.ClearListOfLines(); 
             }
             catch (System.Exception e)
             {
