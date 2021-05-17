@@ -32,6 +32,10 @@ namespace PID_Controller_WPF.ViewModel
         /// Command used to stop a timer 
         /// </summary>
         public ICommand StopTimerCommand { get; set; }
+        /// <summary>
+        /// Command used to restart a timer 
+        /// </summary>
+        public ICommand RestartTimerCommand { get; set; }
         #endregion  // Commands
 
         #region ViewModels
@@ -62,6 +66,7 @@ namespace PID_Controller_WPF.ViewModel
                 this.SetpointDownCommand = new SetpointDownCommand(this);
                 this.StartTimerCommand = new StartTimerCommand(this);
                 this.StopTimerCommand = new StopTimerCommand(this);
+                this.RestartTimerCommand = new RestartTimerCommand(this);
 
                 // ViewModels
                 this._TextBlockViewModel = textBlockViewModel;

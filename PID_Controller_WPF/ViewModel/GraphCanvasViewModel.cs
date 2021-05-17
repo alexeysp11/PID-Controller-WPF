@@ -272,5 +272,12 @@ namespace PID_Controller_WPF.ViewModel
                 handler(this, e);
             }
         }
+
+        #region Methods
+        public void ClearListOfLines()
+        {
+            lines.Clear(); 
+        }
+        #endregion  // Methods
     }
 }

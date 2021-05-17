@@ -91,6 +91,8 @@
                 Height="25" Width="50" Canvas.Left="25" Canvas.Top="185" />
             <Button Content="Stop" Command="{Binding PidViewModel.StopTimerCommand}"
                 Height="25" Width="50" Canvas.Left="80" Canvas.Top="185" />
+            <Button Content="Restart" Command="{Binding PidViewModel.RestartTimerCommand}"
+                Height="25" Width="50" Canvas.Left="135" Canvas.Top="185" />
         </Canvas>
 
         <!--Keyboard shortcuts-->
