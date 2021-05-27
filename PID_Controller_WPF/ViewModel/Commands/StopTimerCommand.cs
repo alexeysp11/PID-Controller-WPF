@@ -40,7 +40,7 @@ namespace PID_Controller_WPF.Commands
 
                 // Set reference point to be able to change SP while timer isn't enabled
                 Point refpoint = new Point(gcvm.SetpointLeft, gcvm.SetpointTop + 2.5); 
-                gcvm.ReferencePoint = refpoint; 
+                gcvm.SpRefPoint = refpoint; 
             }
             catch (System.Exception e)
             {

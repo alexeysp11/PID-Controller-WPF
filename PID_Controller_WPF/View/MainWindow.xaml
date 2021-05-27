@@ -14,10 +14,19 @@
     </Window.DataContext>
 
     <Window.InputBindings>
+        <!--Change setpoint position-->
         <KeyBinding Command="{Binding PidViewModel.SetpointUpCommand}" 
                     Key="W" />
         <KeyBinding Command="{Binding PidViewModel.SetpointDownCommand}" 
                     Key="S" />
+        
+        <!--Change process variable position-->
+        <KeyBinding Command="{Binding PidViewModel.PvUpCommand}" 
+                    Key="W"
+                    Modifiers="Ctrl" />
+        <KeyBinding Command="{Binding PidViewModel.PvDownCommand}" 
+                    Key="S"
+                    Modifiers="Ctrl" />
     </Window.InputBindings>
     
     <Grid>
@@ -52,47 +61,54 @@
                 Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="35" />
 
+            <!--Process variable info-->
+            <TextBlock Text="Process variable:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="60" />
+            <TextBlock Name="ProcessVariable" 
+                Text="{Binding TextBlockViewModel.ProcessVariableTextBlock, Mode=TwoWay}" 
+                Height="25" Width="100" Canvas.Left="150" Canvas.Top="60" />
+
             <!--Integral error info-->
             <TextBlock Text="Integral error:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="60" />
+                Canvas.Left="25" Canvas.Top="85" />
             <TextBlock Name="IntegralError" 
                 Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
-                Height="25"  Width="100" Canvas.Left="150" Canvas.Top="60" />
+                Height="25"  Width="100" Canvas.Left="150" Canvas.Top="85" />
             
             <!--Proportional gain info-->
             <TextBlock Text="Proportional gain:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="85" />
-            <TextBlock Name="ProportionalGain" 
-                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100" Canvas.Left="150" Canvas.Top="85" />
-
-            <!--Integral gain info-->
-            <TextBlock Text="Integral gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="110" />
-            <TextBlock Name="IntegralGain" 
+            <TextBlock Name="ProportionalGain" 
                 Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="110" />
 
-            <!--Derivative gain info-->
-            <TextBlock Text="Derivative gain:" Height="25" Width="100" 
+            <!--Integral gain info-->
+            <TextBlock Text="Integral gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="135" />
-            <TextBlock Name="DerivativeGain" 
+            <TextBlock Name="IntegralGain" 
                 Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="135" />
 
+            <!--Derivative gain info-->
+            <TextBlock Text="Derivative gain:" Height="25" Width="100" 
+                Canvas.Left="25" Canvas.Top="160" />
+            <TextBlock Name="DerivativeGain" 
+                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Height="25" Width="100" Canvas.Left="150" Canvas.Top="160" />
+
             <!--Time info-->
             <TextBlock Text="Time:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="160" />
+                Canvas.Left="25" Canvas.Top="185" />
             <TextBlock Name="Time" 
                 Text="{Binding TextBlockViewModel.TimeTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100"  Canvas.Left="150" Canvas.Top="160" />
+                Height="25" Width="100"  Canvas.Left="150" Canvas.Top="185" />
 
             <Button Content="Start" Command="{Binding PidViewModel.StartTimerCommand}"
-                Height="25" Width="50" Canvas.Left="25" Canvas.Top="185" />
+                Height="25" Width="50" Canvas.Left="25" Canvas.Top="210" />
             <Button Content="Stop" Command="{Binding PidViewModel.StopTimerCommand}"
-                Height="25" Width="50" Canvas.Left="80" Canvas.Top="185" />
+                Height="25" Width="50" Canvas.Left="80" Canvas.Top="210" />
             <Button Content="Restart" Command="{Binding PidViewModel.RestartTimerCommand}"
-                Height="25" Width="50" Canvas.Left="135" Canvas.Top="185" />
+                Height="25" Width="50" Canvas.Left="135" Canvas.Top="210" />
         </Canvas>
 
         <!--Keyboard shortcuts-->
@@ -132,6 +148,18 @@
             <!--Graph canvas-->
             <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="1" Grid.Row="1"/>
             <Canvas Name="GraphCanvas" Grid.Row="1" Grid.Column="1" >
+                
+                <!--Process variable ellipse-->
+                <Ellipse Width="5" Height="5" Fill="Blue" x:Uid="ProcessVariableEllipse">
+                    <Ellipse.RenderTransform>
+                        <TransformGroup>
+                            <TranslateTransform X="{Binding GraphCanvasViewModel.ProcessVariableLeft, Mode=OneWay}" 
+                                Y="{Binding GraphCanvasViewModel.ProcessVariableTop, Mode=OneWay}" />
+                        </TransformGroup>
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+                
+                <!--Setpoint ellipse-->
                 <Ellipse Width="5" Height="5" Fill="Red" x:Uid="SetpointEllipse">
                     <Ellipse.RenderTransform>
                         <TransformGroup>

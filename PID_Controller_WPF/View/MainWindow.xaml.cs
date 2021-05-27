@@ -92,6 +92,7 @@ namespace PID_Controller_WPF.View
 
                 // Pass width and height of a canvas to the GraphCanvasViewModel 
                 ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.Setpoint = 0; 
+                ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.ProcessVariable = 0; 
 
                 // Draw coordinates 
                 DrawCoordinates();
@@ -115,7 +116,7 @@ namespace PID_Controller_WPF.View
             List<UIElement> itemstoremove = new List<UIElement>();
             foreach (UIElement ui in _GraphCanvas.Children)
             {
-                if (!ui.Uid.StartsWith("SetpointEllipse"))
+                if (!ui.Uid.StartsWith("SetpointEllipse") && !ui.Uid.StartsWith("ProcessVariableEllipse"))
                 {
                     itemstoremove.Add(ui);
                 }

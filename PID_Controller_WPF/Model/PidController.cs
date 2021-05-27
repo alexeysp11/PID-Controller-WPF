@@ -4,35 +4,35 @@ namespace PID_Controller_WPF.Model
     {
         #region Properties
         /// <summary>
-        /// 
+        /// Value of the process variable 
         /// </summary>
         public float ProcessVariable { get; private set; } = 0; 
         /// <summary>
-        /// 
+        /// Set point of PID controller 
         /// </summary>
         public float SetPoint { get; private set; } = 0; 
         /// <summary>
-        /// 
+        /// Proportional gain of PID controller 
         /// </summary>
         public float ProportionalGain { get; private set; } = 0; 
         /// <summary>
-        /// 
+        /// Integral gain of PID controller 
         /// </summary>
         public float IntegralGain { get; private set; } = 0; 
         /// <summary>
-        /// 
+        /// Derivative gain of PID controller 
         /// </summary>
         public float DerivativeGain { get; private set; } = 0; 
         /// <summary>
-        /// 
+        /// Integral term of PID controller 
         /// </summary>
         public float IntegralTerm { get; private set; } = 0; 
         /// <summary>
-        /// 
+        /// Max value of process variables 
         /// </summary>
         public float MaxValue { get; private set; } = 0; 
         /// <summary>
-        /// 
+        /// Min value of process variables 
         /// </summary>
         public float MinValue { get; private set; } = 0; 
         #endregion  // Properties
@@ -52,18 +52,18 @@ namespace PID_Controller_WPF.Model
 
         #region Methods
         /// <summary>
-        /// 
+        /// Allows to control process variable 
         /// </summary>
         /// <param name="dt"></param>
-        private float Control(float dt)
+        private float Control(System.TimeSpan dt)
         {
             // An error of PID controller. 
             float error = this.SetPoint - this.ProcessVariable; 
 
             // Calculate terms of PID controller. 
-            float proportionalTerm = 0;  
-            this.IntegralTerm += this.IntegralGain * error * dt; 
-            float derivativeTerm = this.DerivativeGain * error / dt; 
+            float proportionalTerm = this.ProportionalGain * error;  
+            this.IntegralTerm += this.IntegralGain * error * (float)dt.TotalSeconds; 
+            float derivativeTerm = this.DerivativeGain * error / (float)dt.TotalSeconds; 
             
             // Calculate output. 
             float output = proportionalTerm + this.IntegralTerm + derivativeTerm; 

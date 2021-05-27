@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using System.Windows.Threading; 
 using PID_Controller_WPF.View; 
+using PID_Controller_WPF.Model; 
 using PID_Controller_WPF.Commands;
 using PID_Controller_WPF.Exceptions; 
 
@@ -13,6 +14,7 @@ namespace PID_Controller_WPF.ViewModel
     {
         #region Members
         public DispatcherTimer TimerGraph { get; private set; } = null; 
+        private PidController _PidController { get; set; } = null; 
         #endregion  // Members
         
         #region Commands
@@ -25,6 +27,14 @@ namespace PID_Controller_WPF.ViewModel
         /// </summary>
         public ICommand SetpointDownCommand { get; set; }
         /// <summary>
+        /// Command for increasing process variable
+        /// </summary>
+        public ICommand PvUpCommand { get; set; }
+        /// <summary>
+        /// Command for decreasing process variable
+        /// </summary>
+        public ICommand PvDownCommand { get; set; }
+        /// <summary>
         /// Command used to start a timer 
         /// </summary>
         public ICommand StartTimerCommand { get; set; }
@@ -36,6 +46,10 @@ namespace PID_Controller_WPF.ViewModel
         /// Command used to restart a timer 
         /// </summary>
         public ICommand RestartTimerCommand { get; set; }
+        /// <summary>
+        /// Command used to restart a timer 
+        /// </summary>
+        //public ICommand ConvertTextCommand => new Command(_ => _PidController.Control(TimerGraph.Interval));
         #endregion  // Commands
 
         #region ViewModels
@@ -64,6 +78,8 @@ namespace PID_Controller_WPF.ViewModel
                 // Commands 
                 this.SetpointUpCommand = new SetpointUpCommand(this);
                 this.SetpointDownCommand = new SetpointDownCommand(this);
+                this.PvUpCommand = new PvUpCommand(this);
+                this.PvDownCommand = new PvDownCommand(this);
                 this.StartTimerCommand = new StartTimerCommand(this);
                 this.StopTimerCommand = new StopTimerCommand(this);
                 this.RestartTimerCommand = new RestartTimerCommand(this);
@@ -71,6 +87,9 @@ namespace PID_Controller_WPF.ViewModel
                 // ViewModels
                 this._TextBlockViewModel = textBlockViewModel;
                 this._GraphCanvasViewModel = graphCanvasViewModel;
+
+                // Model 
+                //_PidController = new PidController(); 
 
                 // Add timer for updating graph and visual elements 
                 TimerGraph = new DispatcherTimer(); 
@@ -94,36 +113,66 @@ namespace PID_Controller_WPF.ViewModel
         /// </summary>
         public void ChangeSetpoint(double delta=1.0f)
         {
-            // Set default value of setpoint 
-            double setpoint = 0; 
+            this.ChangeVar(delta, true, false); 
+        }
 
-            // Update textblock 
+        /// <summary>
+        /// Changes process variable on the screen 
+        /// </summary>
+        public void ChangeProcessVariable(double delta=1.0f)
+        {
+            this.ChangeVar(delta, false, true); 
+        }
+
+        /// <summary>
+        /// Changes a variable on the screen 
+        /// </summary>
+        private void ChangeVar(double delta, bool isSetpoint, bool isPv)
+        {
+            // Assign value 
+            double value = 0; 
+
+            // Get value from textblock 
             try
             {
-                setpoint = System.Convert.ToSingle(_TextBlockViewModel.SetPointTextBlock);
+                if (isSetpoint)
+                {
+                    value = System.Convert.ToSingle(_TextBlockViewModel.SetPointTextBlock);
+                }
+                else if (isPv)
+                {
+                    value = System.Convert.ToSingle(_TextBlockViewModel.ProcessVariableTextBlock);
+                }
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show("Unable to convert string to float");
                 ExceptionViewer.WatchExceptionMessageBox(e);
             }
 
-            // Correct setpoint value 
-            setpoint += delta;
-            if (setpoint > MainWindow.MaxPvGraph)
+            // Correct value 
+            value += delta;
+            if (value > MainWindow.MaxPvGraph)
             {
-                setpoint = MainWindow.MaxPvGraph;
+                value = MainWindow.MaxPvGraph;
             }
-            else if (setpoint < MainWindow.MinPvGraph)
+            else if (value < MainWindow.MinPvGraph)
             {
-                setpoint = MainWindow.MinPvGraph;
+                value = MainWindow.MinPvGraph;
             }
-            _TextBlockViewModel.SetPointTextBlock = $"{setpoint}"; 
-
+            
             // Update graph
             try
             {
-                _GraphCanvasViewModel.Setpoint = setpoint;
+                if (isSetpoint)
+                {
+                    _TextBlockViewModel.SetPointTextBlock = $"{value}"; 
+                    _GraphCanvasViewModel.Setpoint = value;
+                }
+                else if (isPv)
+                {
+                    _TextBlockViewModel.ProcessVariableTextBlock = $"{value}"; 
+                    _GraphCanvasViewModel.ProcessVariable = value;
+                }
             }
             catch (System.Exception e)
             {
