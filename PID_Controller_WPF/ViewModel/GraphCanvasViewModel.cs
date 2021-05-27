@@ -297,6 +297,7 @@ namespace PID_Controller_WPF.ViewModel
         public void ClearListOfLines()
         {
             SetpointLines.Clear();          // Clear list of lines
+            ProcessVarLines.Clear();        // Clear list of lines
             MainWindow.DrawCoordinates();   // Draw line 
         }
 

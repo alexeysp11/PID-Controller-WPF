@@ -39,11 +39,19 @@ namespace PID_Controller_WPF.Commands
                 // Say that timer is not enabled 
                 gcvm.IsTimerEnabled = false; 
 
-                // Set SP and time to zero 
+                // Set size of a window
                 MainWindow.MinTimeGraph = 0; 
                 MainWindow.MaxTimeGraph = 60; 
+
+                // Set SP to zero 
                 gcvm.Setpoint = 0; 
                 _PidViewModel._TextBlockViewModel.SetPointTextBlock = $"{gcvm.Setpoint}"; 
+                
+                // Set PV to zero 
+                gcvm.ProcessVariable = 0; 
+                _PidViewModel._TextBlockViewModel.ProcessVariableTextBlock = $"{gcvm.ProcessVariable}"; 
+
+                // Set time to zero
                 gcvm.Time = 0; 
                 _PidViewModel._TextBlockViewModel.TimeTextBlock = $"{gcvm.Time}";
 
