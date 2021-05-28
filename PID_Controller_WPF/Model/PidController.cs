@@ -2,15 +2,7 @@ namespace PID_Controller_WPF.Model
 {
     class PidController
     {
-        #region Properties
-        /// <summary>
-        /// Value of the process variable 
-        /// </summary>
-        public float ProcessVariable { get; private set; } = 0; 
-        /// <summary>
-        /// Set point of PID controller 
-        /// </summary>
-        public float SetPoint { get; private set; } = 0; 
+        #region PID controller parameters
         /// <summary>
         /// Proportional gain of PID controller 
         /// </summary>
@@ -27,26 +19,35 @@ namespace PID_Controller_WPF.Model
         /// Integral term of PID controller 
         /// </summary>
         public float IntegralTerm { get; private set; } = 0; 
+        #endregion  // PID controller parameters
+
+        #region PV properties
         /// <summary>
         /// Max value of process variables 
         /// </summary>
-        public float MaxValue { get; private set; } = 0; 
+        private float MaxValue { get; set; } = 0; 
         /// <summary>
         /// Min value of process variables 
         /// </summary>
-        public float MinValue { get; private set; } = 0; 
-        #endregion  // Properties
+        private float MinValue { get; set; } = 0; 
+        #endregion  // PV properties
 
         #region Constructor
         /// <summary>
-        /// 
+        /// Constructor of a class `PidController`
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
         public PidController(float minValue, float maxValue)
         {
+            // Assign min and max values that PV can be equal
             this.MaxValue = maxValue; 
             this.MinValue = minValue; 
+
+            // Set PID parameters
+            this.ProportionalGain = -0.8f; 
+            this.IntegralGain = 1.0f; 
+            this.DerivativeGain = 0.1f; 
         }
         #endregion  // Constructor
 
@@ -55,10 +56,10 @@ namespace PID_Controller_WPF.Model
         /// Allows to control process variable 
         /// </summary>
         /// <param name="dt"></param>
-        private float Control(System.TimeSpan dt)
+        public float ControlPv(float processVariable, float setpoint, System.TimeSpan dt)
         {
             // An error of PID controller. 
-            float error = this.SetPoint - this.ProcessVariable; 
+            float error = setpoint - processVariable; 
 
             // Calculate terms of PID controller. 
             float proportionalTerm = this.ProportionalGain * error;  

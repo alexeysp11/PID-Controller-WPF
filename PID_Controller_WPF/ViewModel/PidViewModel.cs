@@ -14,7 +14,6 @@ namespace PID_Controller_WPF.ViewModel
     {
         #region Members
         public DispatcherTimer TimerGraph { get; private set; } = null; 
-        private PidController _PidController { get; set; } = null; 
         #endregion  // Members
         
         #region Commands
@@ -46,10 +45,6 @@ namespace PID_Controller_WPF.ViewModel
         /// Command used to restart a timer 
         /// </summary>
         public ICommand RestartTimerCommand { get; set; }
-        /// <summary>
-        /// Command used to restart a timer 
-        /// </summary>
-        //public ICommand ConvertTextCommand => new Command(_ => _PidController.Control(TimerGraph.Interval));
         #endregion  // Commands
 
         #region ViewModels
@@ -62,6 +57,10 @@ namespace PID_Controller_WPF.ViewModel
         /// </summary>
         public GraphCanvasViewModel _GraphCanvasViewModel { get; private set; }
         #endregion  // ViewModels
+
+        #region Models
+        private PidController _PidController { get; set; } = null; 
+        #endregion  // Models
 
         #region Properties 
         public static double DelaySeconds = 0.1; 
@@ -88,15 +87,28 @@ namespace PID_Controller_WPF.ViewModel
                 this._TextBlockViewModel = textBlockViewModel;
                 this._GraphCanvasViewModel = graphCanvasViewModel;
 
-                // Model 
-                //_PidController = new PidController(); 
+                // Models
+                _PidController = new PidController(
+                    (float)MainWindow.MinPvGraph, 
+                    (float)MainWindow.MaxPvGraph
+                ); 
 
                 // Add timer for updating graph and visual elements 
                 TimerGraph = new DispatcherTimer(); 
                 TimerGraph.Tick += new System.EventHandler((o, e) => 
                 {
+                    // Increase time and change text block for time
                     _GraphCanvasViewModel.Time += DelaySeconds; 
                     _TextBlockViewModel.TimeTextBlock = $"{System.Math.Round(_GraphCanvasViewModel.Time, 3)}"; 
+
+                    // Call method of PID controller to adjust PV
+                    float processVariable = _PidController.ControlPv(
+                        (float)_GraphCanvasViewModel.ProcessVariable, 
+                        (float)_GraphCanvasViewModel.Setpoint, 
+                        TimerGraph.Interval
+                    ); 
+                    _TextBlockViewModel.ProcessVariableTextBlock = $"{processVariable}"; 
+                    _GraphCanvasViewModel.ProcessVariable = (double)processVariable;
                 }); 
                 TimerGraph.Interval = System.TimeSpan.FromSeconds(DelaySeconds);
             }
