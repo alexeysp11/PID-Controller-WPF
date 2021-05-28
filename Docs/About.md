@@ -204,7 +204,7 @@ namespace PID_Controller_WPF.ViewModel
 ```
 
 Также нужно добавить функционал для **сброса таймера** и возвращения всех визуальных элементов (точек) в *начало координат*. 
-Для этого в команде `RestartTimerCommand` необходимо прописать следующее: 
+Для этого в классе `RestartTimerCommand` необходимо прописать следующее: 
 ```C#
 namespace PID_Controller_WPF.Commands
 {

@@ -1,7 +1,18 @@
 # PID-Controller-WPF
 
-<!--
-If you want to add some UI element (for example, point of SP and PV) on the canvas when the window is loaded, you need to change property of `GraphCanvasViewModel` class in the constructor of `MainWindow` class: 
+Application `PID-Controller-WPF` is designed to simulate a **PID controller** in order to regulate *process variable* depending on *setpoint*. 
+
+For example, if you need to ensure that the *real speed of a vehicle* is consistent with the value of a *desired speed*, then the application `PID-Controller-WPF` can be useful when selecting the parameters of the **PID controller**.
+
+This app is written in `C#` programming language using **MVVM** pattern. 
+
+![MainWindow](Docs/img/Usage/MainWindow.png)
+
+## Code snippets 
+
+### Adding new UI elements
+
+If you want to add some UI element (for example, a point of SP and PV) on the canvas when the window is loaded, you need to change `Setpoint` and `ProcessVariable` properties of `GraphCanvasViewModel` class in the constructor of `MainWindow` class as shown below: 
 ```C#
 namespace PID_Controller_WPF.View
 {
@@ -29,7 +40,7 @@ namespace PID_Controller_WPF.View
 }
 ```
 
-Then in `GraphCanvasViewModel` you want to define boolean variables `IsSpMovedToInitPoint` and `IsPvMovedToInitPoint` to get if SP and PV have been already moved to the point (0, 0) in the **Cartesian coordinates**. 
+Then in `GraphCanvasViewModel` you want to define boolean variables `IsSpMovedToInitPoint` and `IsPvMovedToInitPoint` to get if SP and PV have been already moved to the origin in the **Cartesian coordinate system**. 
 ```C#
 namespace PID_Controller_WPF.ViewModel
 {
@@ -192,7 +203,8 @@ namespace PID_Controller_WPF.ViewModel
 }
 ```
 
-Then in `RestartTimerCommand` you need to write something like this: 
+You also need to add functionality to **reset the timer** and return all visual elements (points of SP and PV) to the *origin*.
+So it's necessary to write the following code in `Execute()` method of `RestartTimerCommand` class: 
 ```C#
 namespace PID_Controller_WPF.Commands
 {
@@ -243,4 +255,3 @@ namespace PID_Controller_WPF.Commands
     }
 }
 ```
--->
