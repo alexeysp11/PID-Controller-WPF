@@ -1,7 +1,18 @@
-# PID-Controller-WPF
+# About 
 
-<!--
-If you want to add some UI element (for example, point of SP and PV) on the canvas when the window is loaded, you need to change property of `GraphCanvasViewModel` class in the constructor of `MainWindow` class: 
+Приложение `PID-Controller-WPF` предназначено для моделирования **ПИД-регулятора** с целью контроля соответствия *управляемой величины* значению *заданного параметра*. 
+
+Например, если необходимо обеспечить соответствие *реальной величины скорости движения* автомобиля величине *желаемой скорости*, то данное приложение может быть полезно при подборе параметров **ПИД-регулятора**. 
+
+Приложение написано с использованием подхода **MVVM**. 
+
+![MainWindow](img/Usage/MainWindow.png)
+
+## Отрывки кода 
+
+### Добавление новых элементов на график
+
+Если Вы хотите добавить новый визуальный элемент на график (например, точки для SP и PV), Вам для начала необходимо в конструкторе класса `MainWindow` установить в ноль занчения `GraphCanvasViewModel.Setpoint` и `GraphCanvasViewModel.ProcessVariable`, после чего вызвать метод `DrawCoordinates()`, который позволит прорисовать координатную сетку и установить подписи к осям. 
 ```C#
 namespace PID_Controller_WPF.View
 {
@@ -29,7 +40,7 @@ namespace PID_Controller_WPF.View
 }
 ```
 
-Then in `GraphCanvasViewModel` you want to define boolean variables `IsSpMovedToInitPoint` and `IsPvMovedToInitPoint` to get if SP and PV have been already moved to the point (0, 0) in the **Cartesian coordinates**. 
+После этого нужно перейти в `GraphCanvasViewModel`и определить булевые переменные `IsSpMovedToInitPoint` и `IsPvMovedToInitPoint`, которые используются для того, чтобы определить, были ли точки для SP и PV передвинуты в *начало координат*. 
 ```C#
 namespace PID_Controller_WPF.ViewModel
 {
@@ -192,7 +203,8 @@ namespace PID_Controller_WPF.ViewModel
 }
 ```
 
-Then in `RestartTimerCommand` you need to write something like this: 
+Также нужно добавить функционал для **сброса таймера** и возвращения всех визуальных элементов (точек) в *начало координат*. 
+Для этого в команде `RestartTimerCommand` необходимо прописать следующее: 
 ```C#
 namespace PID_Controller_WPF.Commands
 {
@@ -243,4 +255,3 @@ namespace PID_Controller_WPF.Commands
     }
 }
 ```
--->
