@@ -72,28 +72,28 @@
             <TextBlock Text="Integral error:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="85" />
             <TextBlock Name="IntegralError" 
-                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockViewModel.IntegralErrorTextBlock, Mode=TwoWay}" 
                 Height="25"  Width="100" Canvas.Left="150" Canvas.Top="85" />
             
             <!--Proportional gain info-->
             <TextBlock Text="Proportional gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="110" />
             <TextBlock Name="ProportionalGain" 
-                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockViewModel.ProptionalGainTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="110" />
 
             <!--Integral gain info-->
             <TextBlock Text="Integral gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="135" />
             <TextBlock Name="IntegralGain" 
-                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockViewModel.IntegralGainTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="135" />
 
             <!--Derivative gain info-->
             <TextBlock Text="Derivative gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="160" />
             <TextBlock Name="DerivativeGain" 
-                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockViewModel.DerivativeGainTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="160" />
 
             <!--Time info-->

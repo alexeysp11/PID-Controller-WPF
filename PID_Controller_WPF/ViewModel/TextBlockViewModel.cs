@@ -27,6 +27,50 @@ namespace PID_Controller_WPF.ViewModel
             }
         }
 
+        private string integralError;
+        public string IntegralErrorTextBlock
+        {
+            get { return integralError; }
+            set 
+            {
+                integralError = value;
+                OnPropertyChanged("IntegralErrorTextBlock");
+            }
+        }
+
+        private string proptionalGain;
+        public string ProptionalGainTextBlock
+        {
+            get { return proptionalGain; }
+            set 
+            {
+                proptionalGain = value;
+                OnPropertyChanged("ProptionalGainTextBlock");
+            }
+        }
+
+        private string integralGain;
+        public string IntegralGainTextBlock
+        {
+            get { return integralGain; }
+            set 
+            {
+                integralGain = value;
+                OnPropertyChanged("IntegralGainTextBlock");
+            }
+        }
+
+        private string derivativeGain;
+        public string DerivativeGainTextBlock
+        {
+            get { return derivativeGain; }
+            set 
+            {
+                derivativeGain = value;
+                OnPropertyChanged("DerivativeGainTextBlock");
+            }
+        }
+
         private string time;
         public string TimeTextBlock
         {

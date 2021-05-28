@@ -109,6 +109,12 @@ namespace PID_Controller_WPF.ViewModel
                     ); 
                     _TextBlockViewModel.ProcessVariableTextBlock = $"{processVariable}"; 
                     _GraphCanvasViewModel.ProcessVariable = (double)processVariable;
+
+                    // Update parameters of PID controller on the canvas
+                    _TextBlockViewModel.IntegralErrorTextBlock = $"{_PidController.IntegralTerm}"; 
+                    _TextBlockViewModel.ProptionalGainTextBlock = $"{_PidController.ProportionalGain}"; 
+                    _TextBlockViewModel.IntegralGainTextBlock = $"{_PidController.IntegralGain}"; 
+                    _TextBlockViewModel.DerivativeGainTextBlock = $"{_PidController.DerivativeGain}"; 
                 }); 
                 TimerGraph.Interval = System.TimeSpan.FromSeconds(DelaySeconds);
             }
