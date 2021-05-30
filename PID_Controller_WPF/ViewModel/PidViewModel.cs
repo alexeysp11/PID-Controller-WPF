@@ -18,21 +18,13 @@ namespace PID_Controller_WPF.ViewModel
         
         #region Commands
         /// <summary>
-        /// Command for increasing setpoint
+        /// Command for changing setpoint
         /// </summary>
-        public ICommand SetpointUpCommand { get; set; }
+        public ICommand ChangeSetpointCommand { get; set; }
         /// <summary>
-        /// Command for decreasing setpoint
+        /// Command for regulating process variable
         /// </summary>
-        public ICommand SetpointDownCommand { get; set; }
-        /// <summary>
-        /// Command for increasing process variable
-        /// </summary>
-        public ICommand PvUpCommand { get; set; }
-        /// <summary>
-        /// Command for decreasing process variable
-        /// </summary>
-        public ICommand PvDownCommand { get; set; }
+        public ICommand RegulatePvCommand { get; set; }
         /// <summary>
         /// Command used to start a timer 
         /// </summary>
@@ -75,10 +67,8 @@ namespace PID_Controller_WPF.ViewModel
             try
             {
                 // Commands 
-                this.SetpointUpCommand = new SetpointUpCommand(this);
-                this.SetpointDownCommand = new SetpointDownCommand(this);
-                this.PvUpCommand = new PvUpCommand(this);
-                this.PvDownCommand = new PvDownCommand(this);
+                this.ChangeSetpointCommand = new ChangeSetpointCommand(this);
+                this.RegulatePvCommand = new RegulatePvCommand(this);
                 this.StartTimerCommand = new StartTimerCommand(this);
                 this.StopTimerCommand = new StopTimerCommand(this);
                 this.RestartTimerCommand = new RestartTimerCommand(this);

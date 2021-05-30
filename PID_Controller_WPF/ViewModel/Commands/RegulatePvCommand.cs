@@ -4,17 +4,17 @@ using PID_Controller_WPF.ViewModel;
 
 namespace PID_Controller_WPF.Commands
 {
-    public class SetpointUpCommand : ICommand
+    public class RegulatePvCommand : ICommand
     {
         public PidViewModel _PidViewModel { get; set; }
 
-        public SetpointUpCommand(PidViewModel pidViewModel)
+        public RegulatePvCommand(PidViewModel pidViewModel)
         {
             this._PidViewModel = pidViewModel; 
         }
 
         public event EventHandler CanExecuteChanged; 
-
+        
         public bool CanExecute(object parameter)
         {
             return true;
@@ -22,7 +22,13 @@ namespace PID_Controller_WPF.Commands
 
         public void Execute(object parameter)
         {
-            this._PidViewModel.ChangeSetpoint(1.0f);
+            double pvDelta = 1;      // Delta for process variable
+            string direction = parameter as string;
+            if (direction == "Decrease")
+            {
+                pvDelta = -pvDelta; 
+            }
+            this._PidViewModel.ChangeProcessVariable(pvDelta);
         }
     }
 }

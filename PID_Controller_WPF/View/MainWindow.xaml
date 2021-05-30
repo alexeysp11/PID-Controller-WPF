@@ -15,16 +15,20 @@
 
     <Window.InputBindings>
         <!--Change setpoint position-->
-        <KeyBinding Command="{Binding PidViewModel.SetpointUpCommand}" 
+        <KeyBinding Command="{Binding PidViewModel.ChangeSetpointCommand}" 
+                    CommandParameter="Increase"
                     Key="W" />
-        <KeyBinding Command="{Binding PidViewModel.SetpointDownCommand}" 
+        <KeyBinding Command="{Binding PidViewModel.ChangeSetpointCommand}" 
+                    CommandParameter="Decrease"
                     Key="S" />
         
         <!--Change process variable position-->
-        <KeyBinding Command="{Binding PidViewModel.PvUpCommand}" 
+        <KeyBinding Command="{Binding PidViewModel.RegulatePvCommand}" 
+                    CommandParameter="Increase"
                     Key="W"
                     Modifiers="Ctrl" />
-        <KeyBinding Command="{Binding PidViewModel.PvDownCommand}" 
+        <KeyBinding Command="{Binding PidViewModel.RegulatePvCommand}" 
+                    CommandParameter="Decrease"
                     Key="S"
                     Modifiers="Ctrl" />
     </Window.InputBindings>
