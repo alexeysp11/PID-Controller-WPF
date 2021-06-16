@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PID_Controller_WPF", "PID_Controller_WPF\PID_Controller_WPF.csproj", "{4C8B659F-811E-41DD-A63A-8A1A1E280F14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.PID_Controller_WPF", "Test.PID_Controller_WPF\Test.PID_Controller_WPF.csproj", "{2C35AE79-7074-4FA2-B98B-9D58D23D2791}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{4C8B659F-811E-41DD-A63A-8A1A1E280F14}.Release|x64.Build.0 = Release|Any CPU
 		{4C8B659F-811E-41DD-A63A-8A1A1E280F14}.Release|x86.ActiveCfg = Release|Any CPU
 		{4C8B659F-811E-41DD-A63A-8A1A1E280F14}.Release|x86.Build.0 = Release|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Debug|x64.Build.0 = Debug|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Debug|x86.Build.0 = Debug|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Release|x64.ActiveCfg = Release|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Release|x64.Build.0 = Release|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Release|x86.ActiveCfg = Release|Any CPU
+		{2C35AE79-7074-4FA2-B98B-9D58D23D2791}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

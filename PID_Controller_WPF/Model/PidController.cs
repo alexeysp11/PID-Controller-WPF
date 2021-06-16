@@ -1,6 +1,9 @@
 namespace PID_Controller_WPF.Model
 {
-    class PidController
+    /// <summary>
+    /// Implements PID controller for adjusting process variable 
+    /// </summary>
+    public class PidController
     {
         #region PID controller parameters
         /// <summary>
@@ -36,8 +39,8 @@ namespace PID_Controller_WPF.Model
         /// <summary>
         /// Constructor of a class `PidController`
         /// </summary>
-        /// <param name="minValue"></param>
-        /// <param name="maxValue"></param>
+        /// <param name="minValue">Minimal value of process variable and setpoint</param>
+        /// <param name="maxValue">Maximal value of process variable and setpoint</param>
         public PidController(float minValue, float maxValue)
         {
             // Assign min and max values that PV can be equal
@@ -55,7 +58,9 @@ namespace PID_Controller_WPF.Model
         /// <summary>
         /// Allows to control process variable 
         /// </summary>
-        /// <param name="dt"></param>
+        /// <param name="processVariable">Value of PV at current time</param>
+        /// <param name="setpoint">Desired setpoint</param>
+        /// <param name="dt">Delta time</param>
         public float ControlPv(float processVariable, float setpoint, System.TimeSpan dt)
         {
             // An error of PID controller. 
