@@ -21,60 +21,28 @@ namespace PidControllerWpf.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region Members 
-        /// <summary>
-        /// Instance of a canvas named `GraphCanvas` that allows to 
-        /// use this canvas from static methods
-        /// </summary>
+        #region Canvas instances 
         public static Canvas _GraphCanvas = null; 
-        /// <summary>
-        /// Instance of a canvas named `ProcessVariableCanvas` that allows to 
-        /// use this canvas from static methods
-        /// </summary>
         public static Canvas _ProcessVariableCanvas = null; 
-        /// <summary>
-        /// Instance of a canvas named `TimeValuesCanvas` that allows to 
-        /// use this canvas from static methods
-        /// </summary>
         public static Canvas _TimeValuesCanvas = null; 
-        #endregion  // Members 
+        #endregion  // Canvas instances 
 
         #region Properties
-        /// <summary>
-        /// Minimum value of a process variable at the graph 
-        /// </summary>
         public static double MinPvGraph { get; set; } = 0.0; 
-        /// <summary>
-        /// Maximum value of a process variable at the graph 
-        /// </summary>
         public static double MaxPvGraph { get; set; } = 50.0; 
-        /// <summary>
-        /// Number of lines along process variable axis at the graph 
-        /// </summary>
+
         public static int NumPvGraph { get; set; } = 10; 
-        /// <summary>
-        /// Minimum value of a time values at the graph
-        /// </summary>
+
         public static double MinTimeGraph { get; set; } = 0.0; 
-        /// <summary>
-        /// Maximum value of a time values at the graph
-        /// </summary>
         public static double MaxTimeGraph { get; set; } = 60.0; 
-        /// <summary>
-        /// Number of lines along time axis at the graph 
-        /// </summary>
-        public static int NumTimeGraph { get; set; } = 10; 
-        /// <summary>
-        /// Width of a graph
-        /// </summary>
+
+        public static int NumLinesTimeAxis { get; set; } = 10; 
+
         public static double GraphWidth { get; set; } = 0.0; 
-        /// <summary>
-        /// Width of a graph
-        /// </summary>
         public static double GraphHeight { get; set; } = 0.0; 
         #endregion  // Properties
 
-        #region Constructor
+        #region Constructors
         public MainWindow()
         {
             InitializeComponent();
@@ -83,36 +51,34 @@ namespace PidControllerWpf.View
             _ProcessVariableCanvas = ProcessVariableCanvas; 
             _TimeValuesCanvas = TimeValuesCanvas; 
 
-            // When canvas is loaded, get size of Graph using lambda expression.
+            // When canvas is loaded, get sizes of Graph.
             Loaded += (o, e) => 
             {
-                // Get actual sizes of the canvas for a graph.
                 GraphWidth = GraphCanvas.ActualWidth; 
                 GraphHeight = GraphCanvas.ActualHeight;
 
-                // Pass width and height of a canvas to the GraphCanvasViewModel 
+                // Pass width and height of a canvas to the ViewModel 
                 ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.Setpoint = 0; 
                 ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.ProcessVariable = 0; 
 
-                // Draw coordinates 
                 DrawCoordinates();
                 
-                // Set labels for each axis of the graph
+                // Set labels for each axis
                 Canvas.SetTop(ValueLabel, GraphHeight/2 - 12.5);
                 Canvas.SetLeft(ValueLabel, 0);
                 Canvas.SetTop(TimeLabel, (float)TimeValuesCanvas.ActualHeight - 32.5);
                 Canvas.SetLeft(TimeLabel, GraphWidth / 2 - 17.5);
             }; 
         }
-        #endregion  // Constructor
+        #endregion  // Constructors
         
-        #region Methods
+        #region Public methods
         /// <summary>
         /// Draws coordinates and grid for a graph
         /// </summary>
         public static void DrawCoordinates()
         {
-            // Remove all elements from the canvas except SetpointEllipse
+            // Remove all elements from the canvas except SP and PV 
             List<UIElement> itemstoremove = new List<UIElement>();
             foreach (UIElement ui in _GraphCanvas.Children)
             {
@@ -128,6 +94,27 @@ namespace PidControllerWpf.View
             _ProcessVariableCanvas.Children.Clear();
             _TimeValuesCanvas.Children.Clear();
 
+            DrawGridHorizontal(); 
+            DrawGridVertical();
+        }
+
+        public static void DrawLine(List<Line> lines)
+        {
+            foreach (var line in lines)
+            {
+                _GraphCanvas.Children.Add(line);
+            }
+        }
+
+        public static void DrawLine(Line line)
+        {
+            _GraphCanvas.Children.Add(line);
+        }
+        #endregion  // Methods
+
+        #region Private methods 
+        private static void DrawGridHorizontal()
+        {
             // Add horizontal lines and their labels to the canvas
             for (int i = 0; i < NumPvGraph - 1; i++)
             {
@@ -150,13 +137,16 @@ namespace PidControllerWpf.View
                 Canvas.SetLeft(xLabel, 25);
                 _ProcessVariableCanvas.Children.Add(xLabel); 
             }
+        }
 
+        private static void DrawGridVertical()
+        {
             // Add vertical lines and their labels to the canvas
-            for (int i = 0; i < NumTimeGraph; i++)
+            for (int i = 0; i < NumLinesTimeAxis; i++)
             {
                 // Vertical line
                 Line yAxis = new Line(); 
-                yAxis.X1 = (GraphWidth / NumTimeGraph) + (i * GraphWidth / NumTimeGraph);
+                yAxis.X1 = (GraphWidth / NumLinesTimeAxis) + (i * GraphWidth / NumLinesTimeAxis);
                 yAxis.X2 = yAxis.X1;
                 yAxis.Y1 = 0;
                 yAxis.Y2 = GraphHeight;
@@ -166,7 +156,7 @@ namespace PidControllerWpf.View
 
                 // Label for vertical line 
                 Label yLabel = new Label();
-                yLabel.Content = $"{(MinTimeGraph + (MaxTimeGraph - MinTimeGraph) / NumTimeGraph) + (i * (MaxTimeGraph - MinTimeGraph) / NumTimeGraph)}"; 
+                yLabel.Content = $"{(MinTimeGraph + (MaxTimeGraph - MinTimeGraph) / NumLinesTimeAxis) + (i * (MaxTimeGraph - MinTimeGraph) / NumLinesTimeAxis)}"; 
                 yLabel.Height = 25; 
                 yLabel.Width = 50; 
                 Canvas.SetTop(yLabel, 0);
@@ -174,25 +164,6 @@ namespace PidControllerWpf.View
                 _TimeValuesCanvas.Children.Add(yLabel); 
             }
         }
-
-        /// <summary>
-        /// Draws each line of lines array for a graph 
-        /// </summary>
-        public static void DrawLine(List<Line> lines)
-        {
-            foreach (var line in lines)
-            {
-                _GraphCanvas.Children.Add(line);
-            }
-        }
-
-        /// <summary>
-        /// Draws a line for a graph 
-        /// </summary>
-        public static void DrawLine(Line line)
-        {
-            _GraphCanvas.Children.Add(line);
-        }
-        #endregion  // Methods
+        #endregion  // Private methods 
     }
 }

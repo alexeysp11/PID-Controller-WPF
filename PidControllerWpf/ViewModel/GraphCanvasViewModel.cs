@@ -15,29 +15,18 @@ namespace PidControllerWpf.ViewModel
         #endregion  // Members
 
         #region Properties
-        /// <summary>
-        /// List of lines that are currently on the canvas 
-        /// </summary>
         private List<Line> SetpointLines = new List<Line>(); 
         private List<Line> ProcessVarLines = new List<Line>(); 
-        /// <summary>
-        /// Boolean variable that shows if timer for graph drawing is enabled
-        /// </summary>
+
         public bool IsTimerEnabled = false; 
         
         private bool isSpMovedToInitPoint = false; 
-        /// <summary>
-        /// Boolean variable that shows if SP moved to (0,0) point on coordinates
-        /// </summary>
         public bool IsSpMovedToInitPoint
         {
             get { return isSpMovedToInitPoint; }
             set { isSpMovedToInitPoint = (!value && !isSpMovedToInitPoint) ? false : true; }
         }
-
-        /// <summary>
-        /// Boolean variable that shows if PV moved to (0,0) point on coordinates
-        /// </summary>        
+     
         private bool isPvMovedToInitPoint = false; 
         public bool IsPvMovedToInitPoint
         {
@@ -58,7 +47,6 @@ namespace PidControllerWpf.ViewModel
             { 
                 this.DrawVariable(ref value, false, true); 
 
-                // Draw all lines 
                 MainWindow.DrawCoordinates(); 
                 MainWindow.DrawLine(SetpointLines);
                 MainWindow.DrawLine(ProcessVarLines);
@@ -69,8 +57,7 @@ namespace PidControllerWpf.ViewModel
                 
         private double setpoint; 
         /// <summary>
-        /// Allows to move setpoint on the graph according to 
-        /// the scale of a graph 
+        /// Allows to move setpoint on the graph according to the scale of a graph 
         /// </summary>
         public double Setpoint
         {
@@ -79,7 +66,6 @@ namespace PidControllerWpf.ViewModel
             {
                 this.DrawVariable(ref value, true, false); 
 
-                // Draw all lines 
                 MainWindow.DrawCoordinates(); 
                 MainWindow.DrawLine(SetpointLines);
                 MainWindow.DrawLine(ProcessVarLines);
@@ -94,29 +80,21 @@ namespace PidControllerWpf.ViewModel
             get { return time; } 
             set
             {
-                // Set min and max of a time  
                 double tmin = MainWindow.MinTimeGraph; 
                 double tmax = MainWindow.MaxTimeGraph; 
 
                 if (value < tmin)
                 {
-                    /* Time could not be less than minimum time, so 
-                    you just set time to the min in this case */ 
                     value = tmin; 
                 }
                 else if (value > tmax - 1)  
                 {
-                    /* In this block you can move all elements 
-                    of a canvas to the left */ 
-
-                    // Increase by delta minimum and maximum time values  
                     MainWindow.MinTimeGraph += 1;
                     MainWindow.MaxTimeGraph += 1;
 
-                    // Assign variables to redefine list of lines
+                    // Assign variables to redefine list of lines (FIFO)
                     try
                     {
-                        // Redefine list of lines according to the FIFO principle 
                         foreach (var line in SetpointLines)
                         {
                             line.X1 -= MainWindow.GraphWidth / (tmax - tmin); 
@@ -148,7 +126,6 @@ namespace PidControllerWpf.ViewModel
                             }
                         }
                         
-                        // Draw coordinates again 
                         MainWindow.DrawCoordinates(); 
                         MainWindow.DrawLine(SetpointLines); 
                         MainWindow.DrawLine(ProcessVarLines); 
@@ -200,7 +177,6 @@ namespace PidControllerWpf.ViewModel
                     }
                 }
                 
-                // Redefine field `time`
                 time = value; 
             }
         }
@@ -269,11 +245,9 @@ namespace PidControllerWpf.ViewModel
         #region Constructor
         public GraphCanvasViewModel()
         {
-            // Set initial values of setpoint 
             this.SetpointTop = 0.0; 
             this.SetpointLeft = 0.0; 
 
-            // Set initial values of process variable  
             this.ProcessVariableTop = 0.0; 
             this.ProcessVariableLeft = 0.0; 
         }
@@ -332,7 +306,6 @@ namespace PidControllerWpf.ViewModel
                 color = System.Windows.Media.Brushes.Blue; 
             }
 
-            // Correct value
             if (value < min)
             {
                 value = min; 

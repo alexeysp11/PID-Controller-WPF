@@ -1,87 +1,63 @@
 namespace PidControllerWpf.Model
 {
     /// <summary>
-    /// Implements PID controller for adjusting process variable 
+    /// Adjusts PV  
     /// </summary>
     public class PidController
     {
-        #region PID controller parameters
-        /// <summary>
-        /// Proportional gain of PID controller 
-        /// </summary>
+        #region Properties 
         public float ProportionalGain { get; private set; } = 0; 
-        /// <summary>
-        /// Integral gain of PID controller 
-        /// </summary>
         public float IntegralGain { get; private set; } = 0; 
-        /// <summary>
-        /// Derivative gain of PID controller 
-        /// </summary>
         public float DerivativeGain { get; private set; } = 0; 
-        /// <summary>
-        /// Integral term of PID controller 
-        /// </summary>
         public float IntegralTerm { get; private set; } = 0; 
-        #endregion  // PID controller parameters
+        #endregion  // Properties 
 
-        #region PV properties
-        /// <summary>
-        /// Max value of process variables 
-        /// </summary>
-        private float MaxValue { get; set; } = 0; 
-        /// <summary>
-        /// Min value of process variables 
-        /// </summary>
-        private float MinValue { get; set; } = 0; 
-        #endregion  // PV properties
+        #region Private fields
+        private float MaxPv = 0; 
+        private float MinPv = 0; 
+        #endregion  // Private fields
 
-        #region Constructor
+        #region Constructors
         /// <summary>
-        /// Constructor of a class `PidController`
+        /// Parameterized constructor of a class `PidController`
         /// </summary>
         /// <param name="minValue">Minimal value of process variable and setpoint</param>
         /// <param name="maxValue">Maximal value of process variable and setpoint</param>
         public PidController(float minValue, float maxValue)
         {
-            // Assign min and max values that PV can be equal
-            this.MaxValue = maxValue; 
-            this.MinValue = minValue; 
+            this.MaxPv = maxValue; 
+            this.MinPv = minValue; 
 
-            // Set PID parameters
             this.ProportionalGain = -0.8f; 
             this.IntegralGain = 1.0f; 
             this.DerivativeGain = 0.1f; 
         }
-        #endregion  // Constructor
+        #endregion  // Constructors
 
         #region Methods
         /// <summary>
         /// Allows to control process variable 
         /// </summary>
-        /// <param name="processVariable">Value of PV at current time</param>
+        /// <param name="pv">Value of PV at current time</param>
         /// <param name="setpoint">Desired setpoint</param>
         /// <param name="dt">Delta time</param>
-        public float ControlPv(float processVariable, float setpoint, System.TimeSpan dt)
+        public float ControlPv(float pv, float setpoint, System.TimeSpan dt)
         {
-            // An error of PID controller. 
-            float error = setpoint - processVariable; 
+            float error = setpoint - pv; 
 
-            // Calculate terms of PID controller. 
             float proportionalTerm = this.ProportionalGain * error;  
             this.IntegralTerm += this.IntegralGain * error * (float)dt.TotalSeconds; 
             float derivativeTerm = this.DerivativeGain * error / (float)dt.TotalSeconds; 
             
-            // Calculate output. 
             float output = proportionalTerm + this.IntegralTerm + derivativeTerm; 
             
-            // Adjust output variable. 
-            if (output >= this.MaxValue)
+            if (output >= this.MaxPv)
             {
-                output = this.MaxValue; 
+                output = this.MaxPv; 
             }
-            else if (output <= this.MinValue)
+            else if (output <= this.MinPv)
             {
-                output = this.MinValue; 
+                output = this.MinPv; 
             }
 
             return output; 
