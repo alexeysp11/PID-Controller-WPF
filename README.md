@@ -14,7 +14,7 @@ This app is written in `C#` programming language using **MVVM** pattern.
 
 If you want to add some UI element (for example, a point of SP and PV) on the canvas when the window is loaded, you need to change `Setpoint` and `ProcessVariable` properties of `GraphCanvasViewModel` class in the constructor of `MainWindow` class as shown below: 
 ```C#
-namespace PID_Controller_WPF.View
+namespace PidControllerWpf.View
 {
     public partial class MainWindow : Window
     {
@@ -42,7 +42,7 @@ namespace PID_Controller_WPF.View
 
 Then in `GraphCanvasViewModel` you want to define boolean variables `IsSpMovedToInitPoint` and `IsPvMovedToInitPoint` to get if SP and PV have been already moved to the origin in the **Cartesian coordinate system**. 
 ```C#
-namespace PID_Controller_WPF.ViewModel
+namespace PidControllerWpf.ViewModel
 {
     public class GraphCanvasViewModel : INotifyPropertyChanged
     {
@@ -206,7 +206,7 @@ namespace PID_Controller_WPF.ViewModel
 You also need to add functionality to **reset the timer** and return all visual elements (points of SP and PV) to the *origin*.
 So it's necessary to write the following code in `Execute()` method of `RestartTimerCommand` class: 
 ```C#
-namespace PID_Controller_WPF.Commands
+namespace PidControllerWpf.Commands
 {
     class RestartTimerCommand : ICommand
     {
