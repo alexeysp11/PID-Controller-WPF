@@ -7,12 +7,12 @@ using PidControllerWpf.Exceptions;
 
 namespace PidControllerWpf.ViewModel
 {
-    public class GraphCanvasViewModel : INotifyPropertyChanged
+    public class GraphCanvasVM : INotifyPropertyChanged
     {
-        #region Members
+        #region Reference points 
         public Point SpRefPoint { get; set; }
         public Point PvRefPoint { get; set; }
-        #endregion  // Members
+        #endregion  // Reference points 
 
         #region Properties
         private List<Line> SetpointLines = new List<Line>(); 
@@ -38,7 +38,9 @@ namespace PidControllerWpf.ViewModel
         {
             get { return IsSpMovedToInitPoint && IsPvMovedToInitPoint; }
         }
+        #endregion  // Properties
 
+        #region Process variable 
         private double processVariable;
         public double ProcessVariable
         {
@@ -54,11 +56,40 @@ namespace PidControllerWpf.ViewModel
                 processVariable = value; 
             }
         }
+
+        private double processVariableTop;
+        public double ProcessVariableTop
+        {
+            get { return processVariableTop; }
+            set 
+            {
+                processVariableTop = value;
+                if (processVariableTop < 0)
+                {
+                    processVariableTop = 0; 
+                }
+                OnPropertyChanged("ProcessVariableTop");
+            }
+        }
+
+        private double processVariableLeft;
+        public double ProcessVariableLeft
+        {
+            get { return processVariableLeft; }
+            set 
+            {
+                processVariableLeft = value;
+                if (processVariableLeft < 0)
+                {
+                    processVariableLeft = 0; 
+                }
+                OnPropertyChanged("ProcessVariableLeft");
+            }
+        }
+        #endregion  // Process variable 
                 
+        #region Setpoint
         private double setpoint; 
-        /// <summary>
-        /// Allows to move setpoint on the graph according to the scale of a graph 
-        /// </summary>
         public double Setpoint
         {
             get { return setpoint; } 
@@ -73,7 +104,39 @@ namespace PidControllerWpf.ViewModel
                 setpoint = value; 
             }
         }
+
+        private double setpointTop;
+        public double SetpointTop
+        {
+            get { return setpointTop; }
+            set 
+            {
+                setpointTop = value;
+                if (setpointTop < 0)
+                {
+                    setpointTop = 0; 
+                }
+                OnPropertyChanged("SetpointTop");
+            }
+        }
+
+        private double setpointLeft;
+        public double SetpointLeft
+        {
+            get { return setpointLeft; }
+            set 
+            {
+                setpointLeft = value;
+                if (setpointLeft < 0)
+                {
+                    setpointLeft = 0; 
+                }
+                OnPropertyChanged("SetpointLeft");
+            }
+        }
+        #endregion  // Setpoint
         
+        #region Time 
         private double time; 
         public double Time
         {
@@ -180,70 +243,10 @@ namespace PidControllerWpf.ViewModel
                 time = value; 
             }
         }
+        #endregion  // Time
 
-        private double processVariableTop;
-        public double ProcessVariableTop
-        {
-            get { return processVariableTop; }
-            set 
-            {
-                processVariableTop = value;
-                if (processVariableTop < 0)
-                {
-                    processVariableTop = 0; 
-                }
-                OnPropertyChanged("ProcessVariableTop");
-            }
-        }
-
-        private double processVariableLeft;
-        public double ProcessVariableLeft
-        {
-            get { return processVariableLeft; }
-            set 
-            {
-                processVariableLeft = value;
-                if (processVariableLeft < 0)
-                {
-                    processVariableLeft = 0; 
-                }
-                OnPropertyChanged("ProcessVariableLeft");
-            }
-        }
-        
-        private double setpointTop;
-        public double SetpointTop
-        {
-            get { return setpointTop; }
-            set 
-            {
-                setpointTop = value;
-                if (setpointTop < 0)
-                {
-                    setpointTop = 0; 
-                }
-                OnPropertyChanged("SetpointTop");
-            }
-        }
-
-        private double setpointLeft;
-        public double SetpointLeft
-        {
-            get { return setpointLeft; }
-            set 
-            {
-                setpointLeft = value;
-                if (setpointLeft < 0)
-                {
-                    setpointLeft = 0; 
-                }
-                OnPropertyChanged("SetpointLeft");
-            }
-        }
-        #endregion  // Properties
-
-        #region Constructor
-        public GraphCanvasViewModel()
+        #region Constructors 
+        public GraphCanvasVM()
         {
             this.SetpointTop = 0.0; 
             this.SetpointLeft = 0.0; 
@@ -251,7 +254,7 @@ namespace PidControllerWpf.ViewModel
             this.ProcessVariableTop = 0.0; 
             this.ProcessVariableLeft = 0.0; 
         }
-        #endregion  // Constructor
+        #endregion  // Constructors 
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string PropertyName)
@@ -265,47 +268,68 @@ namespace PidControllerWpf.ViewModel
         }
 
         #region Methods
-        /// <summary>
-        /// Clears all lists of lines used for drawing SP and PV
-        /// </summary>
         public void ClearListOfLines()
         {
-            SetpointLines.Clear();          // Clear list of lines
-            ProcessVarLines.Clear();        // Clear list of lines
-            MainWindow.DrawCoordinates();   // Draw line 
+            SetpointLines.Clear(); 
+            ProcessVarLines.Clear(); 
+            MainWindow.DrawCoordinates(); 
         }
 
         /// <summary>
-        /// Allows to draw SP and PV
+        /// Allows to draw SP or PV
         /// </summary>
         private void DrawVariable(ref double value, bool isSetpoint, bool isPv)
         {
             double min = MainWindow.MinPvGraph; 
             double max = MainWindow.MaxPvGraph; 
-            double VarLeft = 0; 
-            double VarTop = 0; 
-            Point ReferencePoint = new Point(); 
+
+            double varLeft = 0; 
+            double varTop = 0; 
+
+            Point referencePoint = new Point(); 
             List<Line> lines = null; 
             System.Windows.Media.Brush color = null; 
 
-            // Assign variables for SP and PV setting
-            if (isSetpoint)
+            AssignVariable(isSetpoint, isPv, ref varLeft, ref varTop, 
+                ref referencePoint, ref lines, ref color); 
+            SetBounds(ref value, min, max); 
+
+            Line line = new Line(); 
+            DrawLineMovingPoint(varLeft, ref varTop, value, max, color, ref line); 
+
+            try
             {
-                VarLeft = this.SetpointLeft; 
-                VarTop = this.SetpointTop; 
-                ReferencePoint = this.SpRefPoint; 
-                lines = this.SetpointLines; 
-                color = System.Windows.Media.Brushes.Red; 
+                CorrectLinesList(isSetpoint, isPv, line, ref referencePoint, ref lines); 
             }
-            else if (isPv)
+            catch (System.Exception e)
             {
-                VarLeft = this.ProcessVariableLeft; 
-                VarTop = this.ProcessVariableTop; 
-                ReferencePoint = this.PvRefPoint; 
-                lines = this.ProcessVarLines; 
-                color = System.Windows.Media.Brushes.Blue; 
+                System.Windows.MessageBox.Show($"Exception: {e}"); 
             }
 
+            ReassignVariable(isSetpoint, isPv, varLeft, varTop, referencePoint, lines); 
+        }
+
+        private void DrawLineMovingPoint(double varLeft, ref double varTop, double value,
+            double max, System.Windows.Media.Brush color, ref Line line)
+        {
+            // Create an instance of a line 
+            line.Stroke = color;
+            line.StrokeThickness = 1.5;
+
+            // Set first point of a line before changing position 
+            line.X1 = varLeft; 
+            line.Y1 = varTop + 2.5; 
+
+            // Move setpoint to the left
+            varTop = MainWindow.GraphHeight - (value * MainWindow.GraphHeight / max) - 2.5; 
+            
+            // Set first point of a line after changing position 
+            line.X2 = varLeft; 
+            line.Y2 = varTop + 2.5; 
+        }
+
+        private void SetBounds(ref double value, double min, double max)
+        {
             if (value < min)
             {
                 value = min; 
@@ -314,79 +338,18 @@ namespace PidControllerWpf.ViewModel
             {
                 value = max; 
             }
+        }
+        #endregion  // Methods
 
-            // Create an instance of a line 
-            Line line = new Line(); 
-            line.Stroke = color;
-            line.StrokeThickness = 1.5;
-
-            // Set first point of a line before changing position 
-            line.X1 = VarLeft; 
-            line.Y1 = VarTop + 2.5; 
-
-            // Move setpoint to the left
-            VarTop = MainWindow.GraphHeight - (value * MainWindow.GraphHeight / max) - 2.5; 
-            
-            // Set first point of a line after changing position 
-            line.X2 = VarLeft; 
-            line.Y2 = VarTop + 2.5; 
-
+        #region List of lines 
+        private void CorrectLinesList(bool isSetpoint, bool isPv, Line line, 
+            ref Point referencePoint, ref List<Line> lines)
+        {
             try
             {
-                // Correct a list of lines 
                 if (!IsTimerEnabled)
                 {
-                    // Assign ReferencePoint for the first time 
-                    if (IsEverStarted)
-                    {
-                        // Define logical variables 
-                        bool isAtPoint = (line.Y1 == ReferencePoint.Y) ? true : false; 
-                        bool isUpper = (line.Y1 < ReferencePoint.Y) ? true : false; 
-                        bool isLower = (line.Y1 > ReferencePoint.Y) ? true : false; 
-                        bool isGoingUp = (line.Y1 > line.Y2) ? true : false; 
-                        bool isGoingDown = (line.Y1 < line.Y2) ? true : false; 
-
-                        // Conditions for adding/removing lines from a list 
-                        if (isAtPoint)
-                        {
-                            lines.Add(line); 
-                        }
-                        else if (isUpper)
-                        {
-                            if (isGoingUp)
-                            {
-                                lines.Add(line); 
-                            }
-                            else if (isGoingDown)
-                            {
-                                lines.RemoveAt(lines.Count - 1); 
-                            }
-                        }
-                        else if (isLower)
-                        {
-                            if (isGoingUp)
-                            {
-                                lines.RemoveAt(lines.Count - 1); 
-                            }
-                            else if (isGoingDown)
-                            {
-                                lines.Add(line); 
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ReferencePoint = new Point(line.X2, line.Y2);
-
-                        if (isSetpoint)
-                        {
-                            IsSpMovedToInitPoint = true; 
-                        }
-                        else if (isPv)
-                        {
-                            IsPvMovedToInitPoint = true; 
-                        }
-                    }
+                    AssignRefPoint(isSetpoint, isPv, line, ref referencePoint, ref lines);
                 }
                 else
                 {
@@ -395,25 +358,138 @@ namespace PidControllerWpf.ViewModel
             }
             catch (System.Exception e)
             {
-                ExceptionViewer.WatchExceptionMessageBox(e); 
+                throw e; 
             }
+        }
+        #endregion  // List of lines 
 
-            // Reassign variables for SP and PV setting
+        #region Assign variables
+        private void AssignVariable(bool isSetpoint, bool isPv, 
+            ref double varLeft, ref double varTop, ref Point referencePoint, 
+            ref List<Line> lines, ref System.Windows.Media.Brush color)
+        {
             if (isSetpoint)
             {
-                this.SetpointLeft = VarLeft; 
-                this.SetpointTop = VarTop; 
-                this.SpRefPoint = ReferencePoint; 
-                this.SetpointLines = lines; 
+                AssignVarAsSetpoint(out varLeft, out varTop, out referencePoint, 
+                    out lines, out color); 
             }
             else if (isPv)
             {
-                this.ProcessVariableLeft = VarLeft; 
-                this.ProcessVariableTop = VarTop; 
-                this.PvRefPoint = ReferencePoint; 
-                this.ProcessVarLines = lines; 
+                AssignVarAsPv(out varLeft, out varTop, out referencePoint, 
+                    out lines, out color);
             }
         }
-        #endregion  // Methods
+        private void AssignVarAsSetpoint(out double varLeft, out double varTop, 
+            out Point referencePoint, out List<Line> lines, out System.Windows.Media.Brush color)
+        {
+            varLeft = this.SetpointLeft; 
+            varTop = this.SetpointTop; 
+            referencePoint = this.SpRefPoint; 
+            lines = this.SetpointLines; 
+            color = System.Windows.Media.Brushes.Red; 
+        }
+
+        private void AssignVarAsPv(out double varLeft, out double varTop, 
+            out Point referencePoint, out List<Line> lines, out System.Windows.Media.Brush color)
+        {
+            varLeft = this.ProcessVariableLeft; 
+            varTop = this.ProcessVariableTop; 
+            referencePoint = this.PvRefPoint; 
+            lines = this.ProcessVarLines; 
+            color = System.Windows.Media.Brushes.Blue; 
+        }
+
+        private void AssignRefPoint(bool isSetpoint, bool isPv, Line line, 
+            ref Point referencePoint, ref List<Line> lines)
+        {
+            if (IsEverStarted)
+            {
+                ReassignRefPoint(line, ref referencePoint, ref lines); 
+            }
+            else
+            {
+                referencePoint = new Point(line.X2, line.Y2);
+                if (isSetpoint)
+                {
+                    IsSpMovedToInitPoint = true; 
+                }
+                else if (isPv)
+                {
+                    IsPvMovedToInitPoint = true; 
+                }
+            }
+        }
+        #endregion  // Assign variables
+
+        #region Reassign variables 
+        private void ReassignVariable(bool isSetpoint, bool isPv, double varLeft, 
+            double varTop, Point referencePoint, List<Line> lines) 
+        {
+            if (isSetpoint)
+            {
+                ReassignSetpoint(varLeft, varTop, referencePoint, lines);
+            }
+            else if (isPv)
+            {
+                ReassignPv(varLeft, varTop, referencePoint, lines); 
+            }
+        }
+
+        private void ReassignSetpoint(double varLeft, double varTop, 
+            Point referencePoint, List<Line> lines)
+        {
+            this.SetpointLeft = varLeft; 
+            this.SetpointTop = varTop; 
+            this.SpRefPoint = referencePoint; 
+            this.SetpointLines = lines; 
+        }
+
+        private void ReassignPv(double varLeft, double varTop, 
+            Point referencePoint, List<Line> lines)
+        {
+            this.ProcessVariableLeft = varLeft; 
+            this.ProcessVariableTop = varTop; 
+            this.PvRefPoint = referencePoint; 
+            this.ProcessVarLines = lines; 
+        }
+
+        private void ReassignRefPoint(Line line, ref Point referencePoint, ref List<Line> lines)
+        {
+            // Define logical variables 
+            bool isAtPoint = (line.Y1 == referencePoint.Y) ? true : false; 
+            bool isUpper = (line.Y1 < referencePoint.Y) ? true : false; 
+            bool isLower = (line.Y1 > referencePoint.Y) ? true : false; 
+            bool isGoingUp = (line.Y1 > line.Y2) ? true : false; 
+            bool isGoingDown = (line.Y1 < line.Y2) ? true : false; 
+
+            // Conditions for adding/removing lines from a list 
+            if (isAtPoint)
+            {
+                lines.Add(line); 
+            }
+            else if (isUpper)
+            {
+                if (isGoingUp)
+                {
+                    lines.Add(line); 
+                }
+                else if (isGoingDown)
+                {
+                    lines.RemoveAt(lines.Count - 1); 
+                }
+            }
+            else if (isLower)
+            {
+                if (isGoingUp)
+                {
+                    lines.RemoveAt(lines.Count - 1); 
+                }
+                else if (isGoingDown)
+                {
+                    lines.Add(line); 
+                }
+            }
+        }
+        #endregion  // Reassign variables 
     }
 }

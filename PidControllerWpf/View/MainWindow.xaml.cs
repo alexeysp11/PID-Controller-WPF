@@ -58,8 +58,8 @@ namespace PidControllerWpf.View
                 GraphHeight = GraphCanvas.ActualHeight;
 
                 // Pass width and height of a canvas to the ViewModel 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.Setpoint = 0; 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.ProcessVariable = 0; 
+                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.Setpoint = 0; 
+                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.ProcessVariable = 0; 
 
                 DrawCoordinates();
                 

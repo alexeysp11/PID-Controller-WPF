@@ -12,7 +12,7 @@ This app is written in `C#` programming language using **MVVM** pattern.
 
 ### Adding new UI elements
 
-If you want to add some UI element (for example, a point of SP and PV) on the canvas when the window is loaded, you need to change `Setpoint` and `ProcessVariable` properties of `GraphCanvasViewModel` class in the constructor of `MainWindow` class as shown below: 
+If you want to add some UI element (for example, a point of SP and PV) on the canvas when the window is loaded, you need to change `Setpoint` and `ProcessVariable` properties of `GraphCanvasVM` class in the constructor of `MainWindow` class as shown below: 
 ```C#
 namespace PidControllerWpf.View
 {
@@ -26,9 +26,9 @@ namespace PidControllerWpf.View
             Loaded += (o, e) => 
             {
                 ...
-                // Pass width and height of a canvas to the GraphCanvasViewModel 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.Setpoint = 0; 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.ProcessVariable = 0; 
+                // Pass width and height of a canvas to the GraphCanvasVM 
+                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.Setpoint = 0; 
+                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.ProcessVariable = 0; 
 
                 // Draw coordinates 
                 DrawCoordinates();
@@ -40,11 +40,11 @@ namespace PidControllerWpf.View
 }
 ```
 
-Then in `GraphCanvasViewModel` you want to define boolean variables `IsSpMovedToInitPoint` and `IsPvMovedToInitPoint` to get if SP and PV have been already moved to the origin in the **Cartesian coordinate system**. 
+Then in `GraphCanvasVM` you want to define boolean variables `IsSpMovedToInitPoint` and `IsPvMovedToInitPoint` to get if SP and PV have been already moved to the origin in the **Cartesian coordinate system**. 
 ```C#
 namespace PidControllerWpf.ViewModel
 {
-    public class GraphCanvasViewModel : INotifyPropertyChanged
+    public class GraphCanvasVM : INotifyPropertyChanged
     {
         ...
         /// <summary>
@@ -218,8 +218,8 @@ namespace PidControllerWpf.Commands
                 // Stop timer 
                 this._PidViewModel.TimerGraph.Stop(); 
                 
-                // Assign `_GraphCanvasViewModel` as `gcvm` for convinience 
-                GraphCanvasViewModel gcvm = this._PidViewModel._GraphCanvasViewModel; 
+                // Assign `_GraphCanvasVM` as `gcvm` for convinience 
+                GraphCanvasVM gcvm = this._PidViewModel._GraphCanvasVM; 
 
                 // Say that timer is not enabled 
                 gcvm.IsTimerEnabled = false; 

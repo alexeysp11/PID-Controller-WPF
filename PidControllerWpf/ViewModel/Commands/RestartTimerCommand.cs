@@ -33,8 +33,8 @@ namespace PidControllerWpf.Commands
                 // Stop timer 
                 this._PidViewModel.TimerGraph.Stop(); 
                 
-                // Assign `_GraphCanvasViewModel` as `gcvm` for convinience 
-                GraphCanvasViewModel gcvm = this._PidViewModel._GraphCanvasViewModel; 
+                // Assign `_GraphCanvasVM` as `gcvm` for convinience 
+                GraphCanvasVM gcvm = this._PidViewModel._GraphCanvasVM; 
 
                 // Say that timer is not enabled 
                 gcvm.IsTimerEnabled = false; 

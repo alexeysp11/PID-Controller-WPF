@@ -47,7 +47,7 @@ namespace PidControllerWpf.ViewModel
         /// <summary>
         /// ViewModel for drawing a graph
         /// </summary>
-        public GraphCanvasViewModel _GraphCanvasViewModel { get; private set; }
+        public GraphCanvasVM _GraphCanvasVM { get; private set; }
         #endregion  // ViewModels
 
         #region Models
@@ -62,7 +62,7 @@ namespace PidControllerWpf.ViewModel
         /// <summary>
         /// Constructor of PidViewModel class
         /// </summary>
-        public PidViewModel(ref TextBlockViewModel textBlockViewModel, ref GraphCanvasViewModel graphCanvasViewModel)
+        public PidViewModel(ref TextBlockViewModel textBlockViewModel, ref GraphCanvasVM GraphCanvasVM)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace PidControllerWpf.ViewModel
 
                 // ViewModels
                 this._TextBlockViewModel = textBlockViewModel;
-                this._GraphCanvasViewModel = graphCanvasViewModel;
+                this._GraphCanvasVM = GraphCanvasVM;
 
                 // Models
                 _PidController = new PidController(
@@ -88,17 +88,17 @@ namespace PidControllerWpf.ViewModel
                 TimerGraph.Tick += new System.EventHandler((o, e) => 
                 {
                     // Increase time and change text block for time
-                    _GraphCanvasViewModel.Time += DelaySeconds; 
-                    _TextBlockViewModel.TimeTextBlock = $"{System.Math.Round(_GraphCanvasViewModel.Time, 3)}"; 
+                    _GraphCanvasVM.Time += DelaySeconds; 
+                    _TextBlockViewModel.TimeTextBlock = $"{System.Math.Round(_GraphCanvasVM.Time, 3)}"; 
 
                     // Call method of PID controller to adjust PV
                     float processVariable = _PidController.ControlPv(
-                        (float)_GraphCanvasViewModel.ProcessVariable, 
-                        (float)_GraphCanvasViewModel.Setpoint, 
+                        (float)_GraphCanvasVM.ProcessVariable, 
+                        (float)_GraphCanvasVM.Setpoint, 
                         TimerGraph.Interval
                     ); 
                     _TextBlockViewModel.ProcessVariableTextBlock = $"{processVariable}"; 
-                    _GraphCanvasViewModel.ProcessVariable = (double)processVariable;
+                    _GraphCanvasVM.ProcessVariable = (double)processVariable;
 
                     // Update parameters of PID controller on the canvas
                     _TextBlockViewModel.IntegralErrorTextBlock = $"{_PidController.IntegralTerm}"; 
@@ -174,12 +174,12 @@ namespace PidControllerWpf.ViewModel
                 if (isSetpoint)
                 {
                     _TextBlockViewModel.SetPointTextBlock = $"{value}"; 
-                    _GraphCanvasViewModel.Setpoint = value;
+                    _GraphCanvasVM.Setpoint = value;
                 }
                 else if (isPv)
                 {
                     _TextBlockViewModel.ProcessVariableTextBlock = $"{value}"; 
-                    _GraphCanvasViewModel.ProcessVariable = value;
+                    _GraphCanvasVM.ProcessVariable = value;
                 }
             }
             catch (System.Exception e)

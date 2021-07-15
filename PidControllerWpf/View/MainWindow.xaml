@@ -157,8 +157,8 @@
                 <Ellipse Width="5" Height="5" Fill="Blue" x:Uid="ProcessVariableEllipse">
                     <Ellipse.RenderTransform>
                         <TransformGroup>
-                            <TranslateTransform X="{Binding GraphCanvasViewModel.ProcessVariableLeft, Mode=OneWay}" 
-                                Y="{Binding GraphCanvasViewModel.ProcessVariableTop, Mode=OneWay}" />
+                            <TranslateTransform X="{Binding GraphCanvasVM.ProcessVariableLeft, Mode=OneWay}" 
+                                Y="{Binding GraphCanvasVM.ProcessVariableTop, Mode=OneWay}" />
                         </TransformGroup>
                     </Ellipse.RenderTransform>
                 </Ellipse>
@@ -167,8 +167,8 @@
                 <Ellipse Width="5" Height="5" Fill="Red" x:Uid="SetpointEllipse">
                     <Ellipse.RenderTransform>
                         <TransformGroup>
-                            <TranslateTransform X="{Binding GraphCanvasViewModel.SetpointLeft, Mode=OneWay}" 
-                                Y="{Binding GraphCanvasViewModel.SetpointTop, Mode=OneWay}" />
+                            <TranslateTransform X="{Binding GraphCanvasVM.SetpointLeft, Mode=OneWay}" 
+                                Y="{Binding GraphCanvasVM.SetpointTop, Mode=OneWay}" />
                         </TransformGroup>
                     </Ellipse.RenderTransform>
                 </Ellipse>

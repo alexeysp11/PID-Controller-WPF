@@ -12,7 +12,7 @@
 
 ### Добавление новых элементов на график
 
-Если Вы хотите добавить новый визуальный элемент на график (например, точки для SP и PV), Вам для начала необходимо в конструкторе класса `MainWindow` установить в ноль занчения `GraphCanvasViewModel.Setpoint` и `GraphCanvasViewModel.ProcessVariable`, после чего вызвать метод `DrawCoordinates()`, который позволит прорисовать координатную сетку и установить подписи к осям. 
+Если Вы хотите добавить новый визуальный элемент на график (например, точки для SP и PV), Вам для начала необходимо в конструкторе класса `MainWindow` установить в ноль занчения `GraphCanvasVM.Setpoint` и `GraphCanvasVM.ProcessVariable`, после чего вызвать метод `DrawCoordinates()`, который позволит прорисовать координатную сетку и установить подписи к осям. 
 ```C#
 namespace PidControllerWpf.View
 {
@@ -26,9 +26,9 @@ namespace PidControllerWpf.View
             Loaded += (o, e) => 
             {
                 ...
-                // Pass width and height of a canvas to the GraphCanvasViewModel 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.Setpoint = 0; 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasViewModel.ProcessVariable = 0; 
+                // Pass width and height of a canvas to the GraphCanvasVM 
+                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.Setpoint = 0; 
+                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.ProcessVariable = 0; 
 
                 // Draw coordinates 
                 DrawCoordinates();
@@ -40,11 +40,11 @@ namespace PidControllerWpf.View
 }
 ```
 
-После этого нужно перейти в `GraphCanvasViewModel`и определить булевые переменные `IsSpMovedToInitPoint` и `IsPvMovedToInitPoint`, которые используются для того, чтобы определить, были ли точки для SP и PV передвинуты в *начало координат*. 
+После этого нужно перейти в `GraphCanvasVM`и определить булевые переменные `IsSpMovedToInitPoint` и `IsPvMovedToInitPoint`, которые используются для того, чтобы определить, были ли точки для SP и PV передвинуты в *начало координат*. 
 ```C#
 namespace PidControllerWpf.ViewModel
 {
-    public class GraphCanvasViewModel : INotifyPropertyChanged
+    public class GraphCanvasVM : INotifyPropertyChanged
     {
         ...
         /// <summary>
@@ -218,8 +218,8 @@ namespace PidControllerWpf.Commands
                 // Stop timer 
                 this._PidViewModel.TimerGraph.Stop(); 
                 
-                // Assign `_GraphCanvasViewModel` as `gcvm` for convinience 
-                GraphCanvasViewModel gcvm = this._PidViewModel._GraphCanvasViewModel; 
+                // Assign `_GraphCanvasVM` as `gcvm` for convinience 
+                GraphCanvasVM gcvm = this._PidViewModel._GraphCanvasVM; 
 
                 // Say that timer is not enabled 
                 gcvm.IsTimerEnabled = false; 

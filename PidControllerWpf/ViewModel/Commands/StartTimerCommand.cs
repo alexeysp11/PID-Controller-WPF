@@ -29,7 +29,7 @@ namespace PidControllerWpf.Commands
             try
             {
                 this._PidViewModel.TimerGraph.Start(); 
-                this._PidViewModel._GraphCanvasViewModel.IsTimerEnabled = true; 
+                this._PidViewModel._GraphCanvasVM.IsTimerEnabled = true; 
             }
             catch (System.Exception e)
             {

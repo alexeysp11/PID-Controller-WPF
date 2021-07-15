@@ -15,10 +15,10 @@ namespace PidControllerWpf.ViewModel
             get { return _TextBlockViewModel; }
         }
 
-        private GraphCanvasViewModel _GraphCanvasViewModel;
-        public GraphCanvasViewModel GraphCanvasViewModel
+        private GraphCanvasVM _GraphCanvasVM;
+        public GraphCanvasVM GraphCanvasVM
         {
-            get { return _GraphCanvasViewModel; }
+            get { return _GraphCanvasVM; }
         }
         #endregion  // ViewModels
 
@@ -27,8 +27,8 @@ namespace PidControllerWpf.ViewModel
         {
             // Initialize ViewModels
             this._TextBlockViewModel = new TextBlockViewModel(); 
-            this._GraphCanvasViewModel = new GraphCanvasViewModel();
-            this._PidViewModel = new PidViewModel(ref _TextBlockViewModel, ref _GraphCanvasViewModel); 
+            this._GraphCanvasVM = new GraphCanvasVM();
+            this._PidViewModel = new PidViewModel(ref _TextBlockViewModel, ref _GraphCanvasVM); 
         }
         #endregion  // Constructor
     }
