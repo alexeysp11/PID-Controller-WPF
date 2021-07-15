@@ -8,13 +8,13 @@ namespace PidControllerWpf.Commands
     class StopTimerCommand : ICommand
     {
         #region Members
-        private PidViewModel _PidViewModel; 
+        private PidVM _PidVM; 
         #endregion  // Members
 
         #region Constructor
-        public StopTimerCommand(PidViewModel pidViewModel)
+        public StopTimerCommand(PidVM PidVM)
         {
-            this._PidViewModel = pidViewModel; 
+            this._PidVM = PidVM; 
         }
         #endregion  // Constructor
 
@@ -30,10 +30,10 @@ namespace PidControllerWpf.Commands
             try
             {
                 // Stop timer 
-                this._PidViewModel.TimerGraph.Stop(); 
+                this._PidVM.TimerGraph.Stop(); 
                 
                 // Assign `_GraphCanvasVM` as `gcvm` for convinience 
-                GraphCanvasVM gcvm = this._PidViewModel._GraphCanvasVM; 
+                GraphCanvasVM gcvm = this._PidVM._GraphCanvasVM; 
 
                 // Say that timer is not enabled 
                 gcvm.IsTimerEnabled = false; 

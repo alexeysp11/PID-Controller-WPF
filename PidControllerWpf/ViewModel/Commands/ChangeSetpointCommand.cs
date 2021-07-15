@@ -6,11 +6,11 @@ namespace PidControllerWpf.Commands
 {
     public class ChangeSetpointCommand : ICommand
     {
-        public PidViewModel _PidViewModel { get; set; }
+        public PidVM _PidVM { get; set; }
 
-        public ChangeSetpointCommand(PidViewModel pidViewModel)
+        public ChangeSetpointCommand(PidVM PidVM)
         {
-            this._PidViewModel = pidViewModel; 
+            this._PidVM = PidVM; 
         }
 
         public event EventHandler CanExecuteChanged; 
@@ -28,7 +28,7 @@ namespace PidControllerWpf.Commands
             {
                 setpointDelta = -setpointDelta; 
             }
-            this._PidViewModel.ChangeSetpoint(setpointDelta);
+            this._PidVM.ChangeSetpoint(setpointDelta);
         }
     }
 }

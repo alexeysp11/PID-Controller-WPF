@@ -51,23 +51,12 @@ namespace PidControllerWpf.View
             _ProcessVariableCanvas = ProcessVariableCanvas; 
             _TimeValuesCanvas = TimeValuesCanvas; 
 
-            // When canvas is loaded, get sizes of Graph.
             Loaded += (o, e) => 
             {
-                GraphWidth = GraphCanvas.ActualWidth; 
-                GraphHeight = GraphCanvas.ActualHeight;
-
-                // Pass width and height of a canvas to the ViewModel 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.Setpoint = 0; 
-                ((MainWindowViewModel)(this.DataContext)).GraphCanvasVM.ProcessVariable = 0; 
-
+                GetActualGraphSizes(); 
+                PassSpAndPvToVM(); 
                 DrawCoordinates();
-                
-                // Set labels for each axis
-                Canvas.SetTop(ValueLabel, GraphHeight/2 - 12.5);
-                Canvas.SetLeft(ValueLabel, 0);
-                Canvas.SetTop(TimeLabel, (float)TimeValuesCanvas.ActualHeight - 32.5);
-                Canvas.SetLeft(TimeLabel, GraphWidth / 2 - 17.5);
+                SetLabelsForEachAxis(); 
             }; 
         }
         #endregion  // Constructors
@@ -78,22 +67,7 @@ namespace PidControllerWpf.View
         /// </summary>
         public static void DrawCoordinates()
         {
-            // Remove all elements from the canvas except SP and PV 
-            List<UIElement> itemstoremove = new List<UIElement>();
-            foreach (UIElement ui in _GraphCanvas.Children)
-            {
-                if (!ui.Uid.StartsWith("SetpointEllipse") && !ui.Uid.StartsWith("ProcessVariableEllipse"))
-                {
-                    itemstoremove.Add(ui);
-                }
-            }
-            foreach (UIElement ui in itemstoremove)
-            {
-                _GraphCanvas.Children.Remove(ui);
-            }
-            _ProcessVariableCanvas.Children.Clear();
-            _TimeValuesCanvas.Children.Clear();
-
+            ClearUiElements(); 
             DrawGridHorizontal(); 
             DrawGridVertical();
         }
@@ -110,9 +84,29 @@ namespace PidControllerWpf.View
         {
             _GraphCanvas.Children.Add(line);
         }
-        #endregion  // Methods
+        #endregion  // Public methods 
 
         #region Private methods 
+        private void GetActualGraphSizes()
+        {
+            GraphWidth = GraphCanvas.ActualWidth; 
+            GraphHeight = GraphCanvas.ActualHeight;
+        }
+
+        private void PassSpAndPvToVM()
+        {
+            ((MainWindowVM)(this.DataContext)).GraphCanvasVM.Setpoint = 0; 
+            ((MainWindowVM)(this.DataContext)).GraphCanvasVM.ProcessVariable = 0; 
+        }
+
+        private void SetLabelsForEachAxis()
+        {
+            Canvas.SetTop(ValueLabel, GraphHeight/2 - 12.5);
+            Canvas.SetLeft(ValueLabel, 0);
+            Canvas.SetTop(TimeLabel, (float)TimeValuesCanvas.ActualHeight - 32.5);
+            Canvas.SetLeft(TimeLabel, GraphWidth / 2 - 17.5); 
+        }
+
         private static void DrawGridHorizontal()
         {
             // Add horizontal lines and their labels to the canvas
@@ -163,6 +157,24 @@ namespace PidControllerWpf.View
                 Canvas.SetLeft(yLabel, yAxis.X1 - 10);
                 _TimeValuesCanvas.Children.Add(yLabel); 
             }
+        }
+
+        private static void ClearUiElements()
+        {
+            List<UIElement> itemstoremove = new List<UIElement>();
+            foreach (UIElement ui in _GraphCanvas.Children)
+            {
+                if (!ui.Uid.StartsWith("SetpointEllipse") && !ui.Uid.StartsWith("ProcessVariableEllipse"))
+                {
+                    itemstoremove.Add(ui);
+                }
+            }
+            foreach (UIElement ui in itemstoremove)
+            {
+                _GraphCanvas.Children.Remove(ui);
+            }
+            _ProcessVariableCanvas.Children.Clear();
+            _TimeValuesCanvas.Children.Clear();
         }
         #endregion  // Private methods 
     }

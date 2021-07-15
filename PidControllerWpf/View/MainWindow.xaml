@@ -10,24 +10,24 @@
         Title="PID Controller" 
         MaxHeight="450" MinHeight="450" MaxWidth="800" MinWidth="800">
     <Window.DataContext>
-        <vm:MainWindowViewModel />
+        <vm:MainWindowVM />
     </Window.DataContext>
 
     <Window.InputBindings>
         <!--Change setpoint position-->
-        <KeyBinding Command="{Binding PidViewModel.ChangeSetpointCommand}" 
+        <KeyBinding Command="{Binding PidVM.ChangeSetpointCommand}" 
                     CommandParameter="Increase"
                     Key="W" />
-        <KeyBinding Command="{Binding PidViewModel.ChangeSetpointCommand}" 
+        <KeyBinding Command="{Binding PidVM.ChangeSetpointCommand}" 
                     CommandParameter="Decrease"
                     Key="S" />
         
         <!--Change process variable position-->
-        <KeyBinding Command="{Binding PidViewModel.RegulatePvCommand}" 
+        <KeyBinding Command="{Binding PidVM.RegulatePvCommand}" 
                     CommandParameter="Increase"
                     Key="W"
                     Modifiers="Ctrl" />
-        <KeyBinding Command="{Binding PidViewModel.RegulatePvCommand}" 
+        <KeyBinding Command="{Binding PidVM.RegulatePvCommand}" 
                     CommandParameter="Decrease"
                     Key="S"
                     Modifiers="Ctrl" />
@@ -62,56 +62,56 @@
             <TextBlock Text="Set point:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="35" />
             <TextBlock Name="SetPoint" 
-                Text="{Binding TextBlockViewModel.SetPointTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockVM.SetPointTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="35" />
 
             <!--Process variable info-->
             <TextBlock Text="Process variable:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="60" />
             <TextBlock Name="ProcessVariable" 
-                Text="{Binding TextBlockViewModel.ProcessVariableTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockVM.ProcessVariableTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="60" />
 
             <!--Integral error info-->
             <TextBlock Text="Integral error:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="85" />
             <TextBlock Name="IntegralError" 
-                Text="{Binding TextBlockViewModel.IntegralErrorTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockVM.IntegralErrorTextBlock, Mode=TwoWay}" 
                 Height="25"  Width="100" Canvas.Left="150" Canvas.Top="85" />
             
             <!--Proportional gain info-->
             <TextBlock Text="Proportional gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="110" />
             <TextBlock Name="ProportionalGain" 
-                Text="{Binding TextBlockViewModel.ProptionalGainTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockVM.ProptionalGainTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="110" />
 
             <!--Integral gain info-->
             <TextBlock Text="Integral gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="135" />
             <TextBlock Name="IntegralGain" 
-                Text="{Binding TextBlockViewModel.IntegralGainTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockVM.IntegralGainTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="135" />
 
             <!--Derivative gain info-->
             <TextBlock Text="Derivative gain:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="160" />
             <TextBlock Name="DerivativeGain" 
-                Text="{Binding TextBlockViewModel.DerivativeGainTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockVM.DerivativeGainTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100" Canvas.Left="150" Canvas.Top="160" />
 
             <!--Time info-->
             <TextBlock Text="Time:" Height="25" Width="100" 
                 Canvas.Left="25" Canvas.Top="185" />
             <TextBlock Name="Time" 
-                Text="{Binding TextBlockViewModel.TimeTextBlock, Mode=TwoWay}" 
+                Text="{Binding TextBlockVM.TimeTextBlock, Mode=TwoWay}" 
                 Height="25" Width="100"  Canvas.Left="150" Canvas.Top="185" />
 
-            <Button Content="Start" Command="{Binding PidViewModel.StartTimerCommand}"
+            <Button Content="Start" Command="{Binding PidVM.StartTimerCommand}"
                 Height="25" Width="50" Canvas.Left="25" Canvas.Top="210" />
-            <Button Content="Stop" Command="{Binding PidViewModel.StopTimerCommand}"
+            <Button Content="Stop" Command="{Binding PidVM.StopTimerCommand}"
                 Height="25" Width="50" Canvas.Left="80" Canvas.Top="210" />
-            <Button Content="Restart" Command="{Binding PidViewModel.RestartTimerCommand}"
+            <Button Content="Restart" Command="{Binding PidVM.RestartTimerCommand}"
                 Height="25" Width="50" Canvas.Left="135" Canvas.Top="210" />
         </Canvas>
 

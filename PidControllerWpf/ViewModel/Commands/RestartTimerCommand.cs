@@ -9,13 +9,13 @@ namespace PidControllerWpf.Commands
     class RestartTimerCommand : ICommand
     {
         #region Members
-        private PidViewModel _PidViewModel; 
+        private PidVM _PidVM; 
         #endregion  // Members
 
         #region Constructor
-        public RestartTimerCommand(PidViewModel pidViewModel)
+        public RestartTimerCommand(PidVM PidVM)
         {
-            this._PidViewModel = pidViewModel; 
+            this._PidVM = PidVM; 
         }
         #endregion  // Constructor
 
@@ -31,10 +31,10 @@ namespace PidControllerWpf.Commands
             try
             {
                 // Stop timer 
-                this._PidViewModel.TimerGraph.Stop(); 
+                this._PidVM.TimerGraph.Stop(); 
                 
                 // Assign `_GraphCanvasVM` as `gcvm` for convinience 
-                GraphCanvasVM gcvm = this._PidViewModel._GraphCanvasVM; 
+                GraphCanvasVM gcvm = this._PidVM._GraphCanvasVM; 
 
                 // Say that timer is not enabled 
                 gcvm.IsTimerEnabled = false; 
@@ -45,15 +45,15 @@ namespace PidControllerWpf.Commands
 
                 // Set SP to zero 
                 gcvm.Setpoint = 0; 
-                _PidViewModel._TextBlockViewModel.SetPointTextBlock = $"{gcvm.Setpoint}"; 
+                _PidVM._TextBlockVM.SetPointTextBlock = $"{gcvm.Setpoint}"; 
                 
                 // Set PV to zero 
                 gcvm.ProcessVariable = 0; 
-                _PidViewModel._TextBlockViewModel.ProcessVariableTextBlock = $"{gcvm.ProcessVariable}"; 
+                _PidVM._TextBlockVM.ProcessVariableTextBlock = $"{gcvm.ProcessVariable}"; 
 
                 // Set time to zero
                 gcvm.Time = 0; 
-                _PidViewModel._TextBlockViewModel.TimeTextBlock = $"{gcvm.Time}";
+                _PidVM._TextBlockVM.TimeTextBlock = $"{gcvm.Time}";
 
                 // Set reference point to be able to change SP while timer isn't enabled
                 Point refpoint = new Point(gcvm.SetpointLeft, gcvm.SetpointTop + 2.5); 

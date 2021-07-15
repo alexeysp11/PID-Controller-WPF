@@ -2,9 +2,8 @@ using System.ComponentModel;
 
 namespace PidControllerWpf.ViewModel
 {
-    public class TextBlockViewModel : INotifyPropertyChanged
+    public class TextBlockVM : INotifyPropertyChanged
     {
-        #region Properties
         private string setpoint;
         public string SetPointTextBlock
         {
@@ -27,17 +26,18 @@ namespace PidControllerWpf.ViewModel
             }
         }
 
-        private string integralError;
-        public string IntegralErrorTextBlock
+        private string time;
+        public string TimeTextBlock
         {
-            get { return integralError; }
+            get { return time; }
             set 
             {
-                integralError = value;
-                OnPropertyChanged("IntegralErrorTextBlock");
+                time = value;
+                OnPropertyChanged("TimeTextBlock");
             }
         }
 
+        #region PID controller's parameters 
         private string proptionalGain;
         public string ProptionalGainTextBlock
         {
@@ -71,26 +71,24 @@ namespace PidControllerWpf.ViewModel
             }
         }
 
-        private string time;
-        public string TimeTextBlock
+        private string integralError;
+        public string IntegralErrorTextBlock
         {
-            get { return time; }
+            get { return integralError; }
             set 
             {
-                time = value;
-                OnPropertyChanged("TimeTextBlock");
+                integralError = value;
+                OnPropertyChanged("IntegralErrorTextBlock");
             }
         }
-        #endregion  // Properties
+        #endregion  // PID controller's parameters 
 
-        #region Constructor
-        public TextBlockViewModel()
+        public TextBlockVM()
         {
             this.SetPointTextBlock = "0"; 
             this.ProcessVariableTextBlock = "0"; 
             this.TimeTextBlock = "0"; 
         }
-        #endregion  // Constructor
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string PropertyName)

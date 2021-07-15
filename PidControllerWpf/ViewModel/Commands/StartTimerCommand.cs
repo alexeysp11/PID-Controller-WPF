@@ -7,13 +7,13 @@ namespace PidControllerWpf.Commands
     public class StartTimerCommand : ICommand 
     {
         #region Members
-        private PidViewModel _PidViewModel; 
+        private PidVM _PidVM; 
         #endregion  // Members
 
         #region Constructor
-        public StartTimerCommand(PidViewModel pidViewModel)
+        public StartTimerCommand(PidVM PidVM)
         {
-            this._PidViewModel = pidViewModel; 
+            this._PidVM = PidVM; 
         }
         #endregion  // Constructor
 
@@ -28,8 +28,8 @@ namespace PidControllerWpf.Commands
         {
             try
             {
-                this._PidViewModel.TimerGraph.Start(); 
-                this._PidViewModel._GraphCanvasVM.IsTimerEnabled = true; 
+                this._PidVM.TimerGraph.Start(); 
+                this._PidVM._GraphCanvasVM.IsTimerEnabled = true; 
             }
             catch (System.Exception e)
             {
