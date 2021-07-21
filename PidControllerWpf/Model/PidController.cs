@@ -1,8 +1,5 @@
 namespace PidControllerWpf.Model
 {
-    /// <summary>
-    /// Adjusts PV  
-    /// </summary>
     public class PidController
     {
         #region Properties 
