@@ -142,7 +142,7 @@ namespace PidControllerWpf.ViewModel
             float pv = (float)_GraphCanvasVM.ProcessVariable; 
             float sp = (float)_GraphCanvasVM.Setpoint; 
 
-            pv = _PidController.ControlPv(pv, sp, TimerGraph.Interval); 
+            _PidController.ControlPv(ref pv, sp, TimerGraph.Interval); 
 
             _TextBlockVM.ProcessVariableTextBlock = $"{pv}"; 
             _GraphCanvasVM.ProcessVariable = (double)pv;

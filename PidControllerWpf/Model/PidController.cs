@@ -2,24 +2,14 @@ namespace PidControllerWpf.Model
 {
     public class PidController
     {
-        #region Properties 
         public float ProportionalGain { get; private set; } = 0; 
         public float IntegralGain { get; private set; } = 0; 
         public float DerivativeGain { get; private set; } = 0; 
         public float IntegralTerm { get; private set; } = 0; 
-        #endregion  // Properties 
 
-        #region Private fields
         private float MaxPv = 0; 
         private float MinPv = 0; 
-        #endregion  // Private fields
 
-        #region Constructors
-        /// <summary>
-        /// Parameterized constructor of a class `PidController`
-        /// </summary>
-        /// <param name="minValue">Minimal value of process variable and setpoint</param>
-        /// <param name="maxValue">Maximal value of process variable and setpoint</param>
         public PidController(float minValue, float maxValue)
         {
             this.MaxPv = maxValue; 
@@ -29,22 +19,14 @@ namespace PidControllerWpf.Model
             this.IntegralGain = 1.0f; 
             this.DerivativeGain = 0.1f; 
         }
-        #endregion  // Constructors
-
-        #region Methods
-        /// <summary>
-        /// Allows to control process variable 
-        /// </summary>
-        /// <param name="pv">Value of PV at current time</param>
-        /// <param name="setpoint">Desired setpoint</param>
-        /// <param name="dt">Delta time</param>
-        public float ControlPv(float pv, float setpoint, System.TimeSpan dt)
+        
+        public void ControlPv(ref float pv, float setpoint, System.TimeSpan deltaTime)
         {
             float error = setpoint - pv; 
 
             float proportionalTerm = this.ProportionalGain * error;  
-            this.IntegralTerm += this.IntegralGain * error * (float)dt.TotalSeconds; 
-            float derivativeTerm = this.DerivativeGain * error / (float)dt.TotalSeconds; 
+            this.IntegralTerm += this.IntegralGain * error * (float)deltaTime.TotalSeconds; 
+            float derivativeTerm = this.DerivativeGain * error / (float)deltaTime.TotalSeconds; 
             
             float output = proportionalTerm + this.IntegralTerm + derivativeTerm; 
             
@@ -56,9 +38,7 @@ namespace PidControllerWpf.Model
             {
                 output = this.MinPv; 
             }
-
-            return output; 
+            pv = output; 
         }
-        #endregion  // Methods
     }
 }

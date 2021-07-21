@@ -9,9 +9,6 @@ namespace Test.PidControllerWpf.Model
 
         private float MinValue { get; set; } = 0; 
         private float MaxValue { get; set; } = 0; 
-        
-        private float ProcessVariable { get; set; } = 0; 
-        private float Setpoint { get; set; } = 32.0f; 
 
         private System.TimeSpan DeltaTime { get; set; }  
 
@@ -28,13 +25,15 @@ namespace Test.PidControllerWpf.Model
         {
             // Arrange 
             DeltaTime = System.TimeSpan.Zero; 
+            float pvExpected = 0;
+            float pv = 0; 
+            float setpoint = 32.0f; 
 
             // Act 
-            float processVariableExpected = ProcessVariable;
-            ProcessVariable = _PidController.ControlPv(ProcessVariable, Setpoint, DeltaTime); 
+            _PidController.ControlPv(ref pv, setpoint, DeltaTime); 
 
             // Assert 
-            Assert.AreEqual(processVariableExpected, ProcessVariable, 0.0f); 
+            Assert.AreEqual(pvExpected, pv, 0.0f); 
         }
     }
 }

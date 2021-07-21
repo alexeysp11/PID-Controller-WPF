@@ -38,6 +38,17 @@ namespace PidControllerWpf.ViewModel
         {
             get { return IsSpMovedToInitPoint && IsPvMovedToInitPoint; }
         }
+
+        private double time; 
+        public double Time
+        {
+            get { return time; } 
+            set
+            {
+                SetTime(ref value); 
+                time = value; 
+            }
+        }
         #endregion  // Properties
 
         #region Process variable 
@@ -136,140 +147,6 @@ namespace PidControllerWpf.ViewModel
         }
         #endregion  // Setpoint
         
-        #region Time 
-        private double time; 
-        public double Time
-        {
-            get { return time; } 
-            set
-            {
-                double tmin = MainWindow.MinTimeGraph; 
-                double tmax = MainWindow.MaxTimeGraph; 
-
-                if (value < tmin)
-                {
-                    value = tmin; 
-                }
-                else if (value > tmax - 1)  
-                {
-                    MainWindow.MinTimeGraph += 1;
-                    MainWindow.MaxTimeGraph += 1;
-                    MoveAxisTimeIncreased(tmin, tmax); 
-                }
-                else 
-                {
-                    MovePointsTimeIncreased(value, tmin, tmax); 
-                }
-                time = value; 
-            }
-        }
-
-        private void MoveAxisTimeIncreased(double tmin, double tmax)
-        {
-            try
-            {
-                MoveAllLinesLeft(tmin, tmax); 
-                MovePointsLeft(tmin, tmax); 
-                RemoveLinesOutOfRange(); 
-                
-                MainWindow.DrawCoordinates(); 
-                MainWindow.DrawLine(SetpointLines); 
-                MainWindow.DrawLine(ProcessVarLines); 
-            }
-            catch (System.Exception e)
-            {
-                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
-            }
-        }
-
-        private void MoveAllLinesLeft(double tmin, double tmax)
-        {
-            foreach (var line in SetpointLines)
-            {
-                line.X1 -= MainWindow.GraphWidth / (tmax - tmin); 
-                line.X2 -= MainWindow.GraphWidth / (tmax - tmin); 
-            }
-            foreach (var line in ProcessVarLines)
-            {
-                line.X1 -= MainWindow.GraphWidth / (tmax - tmin); 
-                line.X2 -= MainWindow.GraphWidth / (tmax - tmin); 
-            }
-        }
-
-        private void MovePointsLeft(double tmin, double tmax)
-        {
-            this.SetpointLeft -= MainWindow.GraphWidth / (tmax - tmin); 
-            this.ProcessVariableLeft -= MainWindow.GraphWidth / (tmax - tmin); 
-        }
-
-        private void RemoveLinesOutOfRange()
-        {
-            for (int i = SetpointLines.Count - 1; i >= 0 ; i--)
-            {
-                if (SetpointLines[i].X1 < 0 || SetpointLines[i].X2 < 0)
-                {
-                    SetpointLines.RemoveAt(i); 
-                }
-            }
-            for (int i = ProcessVarLines.Count - 1; i >= 0 ; i--)
-            {
-                if (ProcessVarLines[i].X1 < 0 || ProcessVarLines[i].X2 < 0)
-                {
-                    ProcessVarLines.RemoveAt(i); 
-                }
-            }
-        }
-
-        private void MovePointsTimeIncreased(double value, double tmin, double tmax)
-        {
-            try
-            {
-                Line lineSp = MoveSpTimeIncreased(value, tmin, tmax); 
-                Line linePv = MovePvTimeIncreased(value, tmin, tmax); 
-
-                SetpointLines.Add(lineSp); 
-                ProcessVarLines.Add(linePv); 
-                MainWindow.DrawLine(lineSp); 
-                MainWindow.DrawLine(linePv); 
-            }
-            catch (System.Exception e)
-            {
-                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
-            }
-        }
-
-        private Line MoveSpTimeIncreased(double value, double tmin, double tmax)
-        {
-            Line lineSp = new Line(); 
-            lineSp.Stroke = System.Windows.Media.Brushes.Red;
-            lineSp.StrokeThickness = 1.5;
-
-            lineSp.X1 = this.SetpointLeft; 
-            lineSp.Y1 = this.SetpointTop + 2.5; 
-            this.SetpointLeft = ((value - tmin) * MainWindow.GraphWidth / (tmax - tmin)) - 2.5; 
-            lineSp.X2 = this.SetpointLeft; 
-            lineSp.Y2 = this.SetpointTop + 2.5; 
-            
-            return lineSp; 
-        }
-
-        private Line MovePvTimeIncreased(double value, double tmin, double tmax)
-        {
-            // A line of PV that needs to be added to the canvas 
-            Line linePv = new Line(); 
-            linePv.Stroke = System.Windows.Media.Brushes.Blue;
-            linePv.StrokeThickness = 1.5;
-
-            linePv.X1 = this.ProcessVariableLeft; 
-            linePv.Y1 = this.ProcessVariableTop + 2.5; 
-            this.ProcessVariableLeft = ((value - tmin) * MainWindow.GraphWidth / (tmax - tmin)) - 2.5; 
-            linePv.X2 = this.ProcessVariableLeft; 
-            linePv.Y2 = this.ProcessVariableTop + 2.5; 
-
-            return linePv; 
-        }
-        #endregion  // Time
-
         #region Constructors 
         public GraphCanvasVM()
         {
@@ -300,9 +177,6 @@ namespace PidControllerWpf.ViewModel
             MainWindow.DrawCoordinates(); 
         }
 
-        /// <summary>
-        /// Allows to draw SP or PV
-        /// </summary>
         private void DrawVariable(ref double value, bool isSetpoint, bool isPv)
         {
             double min = MainWindow.MinPvGraph; 
@@ -337,20 +211,16 @@ namespace PidControllerWpf.ViewModel
         private void DrawLineMovingPoint(double varLeft, ref double varTop, double value,
             double max, System.Windows.Media.Brush color, ref Line line)
         {
-            // Create an instance of a line 
             line.Stroke = color;
             line.StrokeThickness = 1.5;
 
-            // Set first point of a line before changing position 
             line.X1 = varLeft; 
-            line.Y1 = varTop + 2.5; 
+            line.Y1 = varTop + 2.5;     // Little shift to bottom, radius of a point is 5. 
 
-            // Move setpoint to the left
             varTop = MainWindow.GraphHeight - (value * MainWindow.GraphHeight / max) - 2.5; 
             
-            // Set first point of a line after changing position 
             line.X2 = varLeft; 
-            line.Y2 = varTop + 2.5; 
+            line.Y2 = varTop + 2.5;     // Little shift to bottom, radius of a point is 5. 
         }
 
         private void SetBounds(ref double value, double min, double max)
@@ -487,7 +357,6 @@ namespace PidControllerWpf.ViewModel
             bool isGoingUp = (line.Y1 > line.Y2) ? true : false; 
             bool isGoingDown = (line.Y1 < line.Y2) ? true : false; 
 
-            // Conditions for adding/removing lines from a list 
             if (isAtPoint)
             {
                 lines.Add(line); 
@@ -516,5 +385,133 @@ namespace PidControllerWpf.ViewModel
             }
         }
         #endregion  // Reassign variables 
+
+        #region Time methods 
+        private void SetTime(ref double value)
+        {
+            double tmin = MainWindow.MinTimeGraph; 
+            double tmax = MainWindow.MaxTimeGraph; 
+
+            if (value < tmin)
+            {
+                value = tmin; 
+            }
+            else if (value > tmax - 1)  
+            {
+                MainWindow.MinTimeGraph += 1;
+                MainWindow.MaxTimeGraph += 1;
+                MoveAxisTimeIncreased(tmin, tmax); 
+            }
+            else 
+            {
+                MovePointsTimeIncreased(value, tmin, tmax); 
+            }
+        }
+
+        private void MoveAxisTimeIncreased(double tmin, double tmax)
+        {
+            try
+            {
+                MoveAllLinesLeft(tmin, tmax); 
+                MovePointsLeft(tmin, tmax); 
+                RemoveLinesOutOfRange(); 
+                
+                MainWindow.DrawCoordinates(); 
+                MainWindow.DrawLine(SetpointLines); 
+                MainWindow.DrawLine(ProcessVarLines); 
+            }
+            catch (System.Exception e)
+            {
+                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
+            }
+        }
+
+        private void MoveAllLinesLeft(double tmin, double tmax)
+        {
+            foreach (var line in SetpointLines)
+            {
+                line.X1 -= MainWindow.GraphWidth / (tmax - tmin); 
+                line.X2 -= MainWindow.GraphWidth / (tmax - tmin); 
+            }
+            foreach (var line in ProcessVarLines)
+            {
+                line.X1 -= MainWindow.GraphWidth / (tmax - tmin); 
+                line.X2 -= MainWindow.GraphWidth / (tmax - tmin); 
+            }
+        }
+
+        private void MovePointsLeft(double tmin, double tmax)
+        {
+            this.SetpointLeft -= MainWindow.GraphWidth / (tmax - tmin); 
+            this.ProcessVariableLeft -= MainWindow.GraphWidth / (tmax - tmin); 
+        }
+
+        private void RemoveLinesOutOfRange()
+        {
+            for (int i = SetpointLines.Count - 1; i >= 0 ; i--)
+            {
+                if (SetpointLines[i].X1 < 0 || SetpointLines[i].X2 < 0)
+                {
+                    SetpointLines.RemoveAt(i); 
+                }
+            }
+            for (int i = ProcessVarLines.Count - 1; i >= 0 ; i--)
+            {
+                if (ProcessVarLines[i].X1 < 0 || ProcessVarLines[i].X2 < 0)
+                {
+                    ProcessVarLines.RemoveAt(i); 
+                }
+            }
+        }
+
+        private void MovePointsTimeIncreased(double value, double tmin, double tmax)
+        {
+            try
+            {
+                Line lineSp = MoveSpTimeIncreased(value, tmin, tmax); 
+                Line linePv = MovePvTimeIncreased(value, tmin, tmax); 
+
+                SetpointLines.Add(lineSp); 
+                ProcessVarLines.Add(linePv); 
+                MainWindow.DrawLine(lineSp); 
+                MainWindow.DrawLine(linePv); 
+            }
+            catch (System.Exception e)
+            {
+                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
+            }
+        }
+
+        private Line MoveSpTimeIncreased(double value, double tmin, double tmax)
+        {
+            Line lineSp = new Line(); 
+            lineSp.Stroke = System.Windows.Media.Brushes.Red;
+            lineSp.StrokeThickness = 1.5;
+
+            lineSp.X1 = this.SetpointLeft; 
+            lineSp.Y1 = this.SetpointTop + 2.5; 
+            this.SetpointLeft = ((value - tmin) * MainWindow.GraphWidth / (tmax - tmin)) - 2.5; 
+            lineSp.X2 = this.SetpointLeft; 
+            lineSp.Y2 = this.SetpointTop + 2.5; 
+            
+            return lineSp; 
+        }
+
+        private Line MovePvTimeIncreased(double value, double tmin, double tmax)
+        {
+            // A line of PV that needs to be added to the canvas 
+            Line linePv = new Line(); 
+            linePv.Stroke = System.Windows.Media.Brushes.Blue;
+            linePv.StrokeThickness = 1.5;
+
+            linePv.X1 = this.ProcessVariableLeft; 
+            linePv.Y1 = this.ProcessVariableTop + 2.5; 
+            this.ProcessVariableLeft = ((value - tmin) * MainWindow.GraphWidth / (tmax - tmin)) - 2.5; 
+            linePv.X2 = this.ProcessVariableLeft; 
+            linePv.Y2 = this.ProcessVariableTop + 2.5; 
+
+            return linePv; 
+        }
+        #endregion  // Time methods 
     }
 }
