@@ -18,14 +18,11 @@ namespace PidControllerWpf.ViewModel
         
         private PidController _PidController { get; set; } = null; 
         
-        #region Commands
-        public ICommand ChangeSetpointCommand { get; set; }
-        public ICommand RegulatePvCommand { get; set; }
-
-        public ICommand StartTimerCommand { get; set; }
-        public ICommand StopTimerCommand { get; set; }
-        public ICommand RestartTimerCommand { get; set; }
-        #endregion  // Commands
+        public ICommand ChangeSetpointCommand { get; private set; }
+        public ICommand RegulatePvCommand { get; private set; }
+        public ICommand StartTimerCommand { get; private set; }
+        public ICommand StopTimerCommand { get; private set; }
+        public ICommand RestartTimerCommand { get; private set; }
 
         public static double DelaySeconds = 0.1; 
 
