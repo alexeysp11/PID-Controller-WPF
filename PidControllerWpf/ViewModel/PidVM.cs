@@ -3,7 +3,6 @@ using System.Windows.Threading;
 using PidControllerWpf.View; 
 using PidControllerWpf.Model; 
 using PidControllerWpf.Commands;
-using PidControllerWpf.Exceptions; 
 
 namespace PidControllerWpf.ViewModel
 {
@@ -84,26 +83,29 @@ namespace PidControllerWpf.ViewModel
         #region Change variables 
         public void ChangeSetpoint(double delta=1.0f)
         {
-            this.ChangeVar(delta, true, false); 
+            double value = 0; 
+            try
+            {
+                GetSpFromTextBox(ref value); 
+                value += delta;
+                SetBoundsForValue(ref value); 
+                UpdateSpOnGraph(value); 
+            }
+            catch (System.Exception e)
+            {
+                System.Windows.MessageBox.Show($"Exception: {e}");
+            }
         }
 
         public void ChangeProcessVariable(double delta=1.0f)
         {
-            this.ChangeVar(delta, false, true); 
-        }
-
-        /// <summary>
-        /// Changes a variable on the screen 
-        /// </summary>
-        private void ChangeVar(double delta, bool isSetpoint, bool isPv)
-        {
             double value = 0; 
             try
             {
-                GetValueFromTextBox(isSetpoint, isPv, ref value); 
+                GetPvFromTextBox(ref value); 
                 value += delta;
                 SetBoundsForValue(ref value); 
-                UpdateGraph(isSetpoint, isPv, value); 
+                UpdatePvOnGraph(value); 
             }
             catch (System.Exception e)
             {
@@ -113,16 +115,14 @@ namespace PidControllerWpf.ViewModel
         #endregion  // Change variables 
 
         #region Methods
-        private void GetValueFromTextBox(bool isSetpoint, bool isPv, ref double value)
+        private void GetSpFromTextBox(ref double value)
         {
-            if (isSetpoint)
-            {
-                value = System.Convert.ToSingle(_TextBlockVM.SetPointTextBlock);
-            }
-            else if (isPv)
-            {
-                value = System.Convert.ToSingle(_TextBlockVM.ProcessVariableTextBlock);
-            }
+            value = System.Convert.ToSingle(_TextBlockVM.SetPointTextBlock);
+        }
+
+        private void GetPvFromTextBox(ref double value)
+        {
+            value = System.Convert.ToSingle(_TextBlockVM.ProcessVariableTextBlock);
         }
 
         private void SetBoundsForValue(ref double value)
@@ -150,18 +150,16 @@ namespace PidControllerWpf.ViewModel
         #endregion  // Methods
 
         #region Updating 
-        private void UpdateGraph(bool isSetpoint, bool isPv, double value)
+        private void UpdateSpOnGraph(double value)
         {
-            if (isSetpoint)
-            {
-                _TextBlockVM.SetPointTextBlock = $"{value}"; 
-                _GraphCanvasVM.Setpoint = value;
-            }
-            else if (isPv)
-            {
-                _TextBlockVM.ProcessVariableTextBlock = $"{value}"; 
-                _GraphCanvasVM.ProcessVariable = value;
-            }
+            _TextBlockVM.SetPointTextBlock = $"{value}"; 
+            _GraphCanvasVM.Setpoint = value;
+        }
+
+        private void UpdatePvOnGraph(double value)
+        {
+            _TextBlockVM.ProcessVariableTextBlock = $"{value}"; 
+            _GraphCanvasVM.ProcessVariable = value;
         }
 
         private void UpdatePidParams()

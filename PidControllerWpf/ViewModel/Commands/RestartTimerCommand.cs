@@ -2,7 +2,6 @@ using System.Windows;
 using System.Windows.Input; 
 using PidControllerWpf.View; 
 using PidControllerWpf.ViewModel; 
-using PidControllerWpf.Exceptions; 
 
 namespace PidControllerWpf.Commands
 {
@@ -40,8 +39,8 @@ namespace PidControllerWpf.Commands
                 gcvm.IsTimerEnabled = false; 
 
                 // Set size of a window
-                MainWindow.MinTimeGraph = 0; 
-                MainWindow.MaxTimeGraph = 60; 
+                MainWindow.MinTimeGraph = MainWindow.InitMinTimeGraph; 
+                MainWindow.MaxTimeGraph = MainWindow.InitMaxTimeGraph; 
 
                 // Set SP to zero 
                 gcvm.Setpoint = 0; 
@@ -64,7 +63,7 @@ namespace PidControllerWpf.Commands
             }
             catch (System.Exception e)
             {
-                ExceptionViewer.WatchExceptionMessageBox(e);
+                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
             }
         }
     }

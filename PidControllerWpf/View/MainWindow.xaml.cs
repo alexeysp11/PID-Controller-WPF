@@ -27,14 +27,19 @@ namespace PidControllerWpf.View
         public static Canvas _TimeValuesCanvas = null; 
         #endregion  // Canvas instances 
 
+        #region Public fields 
+        public const double InitMinTimeGraph = 0; 
+        public const double InitMaxTimeGraph = 10; 
+        #endregion  // Public fields 
+
         #region Properties
         public static double MinPvGraph { get; set; } = 0.0; 
         public static double MaxPvGraph { get; set; } = 50.0; 
 
         public static int NumPvGraph { get; set; } = 10; 
 
-        public static double MinTimeGraph { get; set; } = 0.0; 
-        public static double MaxTimeGraph { get; set; } = 60.0; 
+        public static double MinTimeGraph { get; set; } = InitMinTimeGraph; 
+        public static double MaxTimeGraph { get; set; } = InitMaxTimeGraph; 
 
         public static int NumLinesTimeAxis { get; set; } = 10; 
 

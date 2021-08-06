@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Shapes;
 using PidControllerWpf.View; 
-using PidControllerWpf.Exceptions; 
 
 namespace PidControllerWpf.ViewModel
 {

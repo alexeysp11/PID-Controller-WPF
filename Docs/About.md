@@ -179,7 +179,7 @@ namespace PidControllerWpf.ViewModel
                 }
             catch (System.Exception e)
             {
-                ExceptionViewer.WatchExceptionMessageBox(e); 
+                System.Windows.MessageBox.Show($"Exception: {e}", "Exception"); 
             }
 
             // Reassign variables for SP and PV setting
@@ -249,7 +249,7 @@ namespace PidControllerWpf.Commands
             }
             catch (System.Exception e)
             {
-                ExceptionViewer.WatchExceptionMessageBox(e);
+                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
             }
         }
     }

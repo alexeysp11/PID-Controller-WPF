@@ -1,7 +1,6 @@
 using System.Windows; 
 using System.Windows.Input; 
 using PidControllerWpf.ViewModel; 
-using PidControllerWpf.Exceptions; 
 
 namespace PidControllerWpf.Commands
 {
@@ -44,7 +43,7 @@ namespace PidControllerWpf.Commands
             }
             catch (System.Exception e)
             {
-                ExceptionViewer.WatchExceptionMessageBox(e);
+                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
             }
         }
     }

@@ -87,6 +87,10 @@ namespace PidControllerWpf.ViewModel
         {
             this.SetPointTextBlock = "0"; 
             this.ProcessVariableTextBlock = "0"; 
+            this.ProptionalGainTextBlock = "0"; 
+            this.IntegralGainTextBlock = "0"; 
+            this.DerivativeGainTextBlock = "0"; 
+            this.IntegralErrorTextBlock = "0"; 
             this.TimeTextBlock = "0"; 
         }
 
