@@ -1,3 +1,3 @@
 @echo off 
 
-dotnet run --project ./PidControllerWpf/PidControllerWpf.csproj
+dotnet run --project ./src/PidControllerWpf.csproj
