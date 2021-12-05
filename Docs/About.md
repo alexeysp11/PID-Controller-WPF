@@ -14,7 +14,7 @@
 
 Если Вы хотите добавить новый визуальный элемент на график (например, точки для SP и PV), Вам для начала необходимо в конструкторе класса `MainWindow` установить в ноль занчения `GraphCanvasVM.Setpoint` и `GraphCanvasVM.ProcessVariable`, после чего вызвать метод `DrawCoordinates()`, который позволит прорисовать координатную сетку и установить подписи к осям. 
 ```C#
-namespace PidControllerWpf.View
+namespace PidControllerWpf.Views
 {
     public partial class MainWindow : Window
     {
@@ -42,7 +42,7 @@ namespace PidControllerWpf.View
 
 После этого нужно перейти в `GraphCanvasVM`и определить булевые переменные `IsSpMovedToInitPoint` и `IsPvMovedToInitPoint`, которые используются для того, чтобы определить, были ли точки для SP и PV передвинуты в *начало координат*. 
 ```C#
-namespace PidControllerWpf.ViewModel
+namespace PidControllerWpf.ViewModels
 {
     public class GraphCanvasVM : INotifyPropertyChanged
     {
@@ -204,11 +204,11 @@ namespace PidControllerWpf.ViewModel
 ```
 
 Также нужно добавить функционал для **сброса таймера** и возвращения всех визуальных элементов (точек) в *начало координат*. 
-Для этого в классе `RestartTimerCommand` необходимо прописать следующее: 
+Для этого в классе `TimerCommand` необходимо прописать следующее: 
 ```C#
 namespace PidControllerWpf.Commands
 {
-    class RestartTimerCommand : ICommand
+    class TimerCommand : ICommand
     {
         ...
         public void Execute(object parameter)

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace PidControllerWpf.ViewModel
+namespace PidControllerWpf.ViewModels
 {
     public class TextBlockVM : INotifyPropertyChanged
     {

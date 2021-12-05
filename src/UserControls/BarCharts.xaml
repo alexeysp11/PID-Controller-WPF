@@ -1,4 +1,4 @@
-<UserControl x:Class="PidControllerWpf.UserControls.KeyboardShortcuts"
+<UserControl x:Class="PidControllerWpf.UserControls.BarCharts"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,10 +7,6 @@
         xmlns:vm="clr-namespace:PidControllerWpf.ViewModels"
         mc:Ignorable="d">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <Label Content="Keyboard shortcuts" />
-            <Label Content="W - Increase setpoint" />
-            <Label Content="S - Decrease setpoint" />
-        </StackPanel>
+        <Label Content="BarCharts" />
     </Grid>
 </UserControl>

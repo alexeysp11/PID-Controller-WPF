@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using PidControllerWpf.Model; 
+using PidControllerWpf.Models; 
 
-namespace Test.PidControllerWpf.Model
+namespace Test.PidControllerWpf.Models
 {
     public class PidControllerTest
     {

@@ -1,4 +1,4 @@
-namespace PidControllerWpf.Model
+namespace PidControllerWpf.Models
 {
     class RecursiveMeanSquares
     {

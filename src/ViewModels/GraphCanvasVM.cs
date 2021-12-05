@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Shapes;
-using PidControllerWpf.View; 
+using PidControllerWpf.Views; 
 using PidControllerWpf.UserControls; 
 
-namespace PidControllerWpf.ViewModel
+namespace PidControllerWpf.ViewModels
 {
     public class GraphCanvasVM : INotifyPropertyChanged
     {

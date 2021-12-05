@@ -1,11 +1,11 @@
 using System.Windows.Input;
 using System.Windows.Threading; 
-using PidControllerWpf.View; 
+using PidControllerWpf.Views; 
 using PidControllerWpf.UserControls; 
-using PidControllerWpf.Model; 
+using PidControllerWpf.Models; 
 using PidControllerWpf.Commands;
 
-namespace PidControllerWpf.ViewModel
+namespace PidControllerWpf.ViewModels
 {
     /// <summary>
     /// Allows to connect UI and PidController 
@@ -19,11 +19,8 @@ namespace PidControllerWpf.ViewModel
         
         private PidController PidController { get; set; } = null; 
         
-        public ICommand ChangeSetpointCommand { get; private set; }
-        public ICommand RegulatePvCommand { get; private set; }
-        public ICommand StartTimerCommand { get; private set; }
-        public ICommand StopTimerCommand { get; private set; }
-        public ICommand RestartTimerCommand { get; private set; }
+        public ICommand VariablesCommand { get; private set; }
+        public ICommand TimerCommand { get; private set; }
 
         public static double DelaySeconds = 0.1; 
 
@@ -33,7 +30,7 @@ namespace PidControllerWpf.ViewModel
             {
                 InitializeCommands(); 
                 InitializeVM(ref textBlockVM, ref graphCanvasVM); 
-                InitializeModels(); 
+                InitializeModelss(); 
 
                 TimerGraph = new DispatcherTimer(); 
                 TimerGraph.Tick += new System.EventHandler((o, e) => 
@@ -55,11 +52,11 @@ namespace PidControllerWpf.ViewModel
         #region Initialize instances 
         private void InitializeCommands()
         {
-            this.ChangeSetpointCommand = new ChangeSetpointCommand(this);
-            this.RegulatePvCommand = new RegulatePvCommand(this);
-            this.StartTimerCommand = new StartTimerCommand(this);
-            this.StopTimerCommand = new StopTimerCommand(this);
-            this.RestartTimerCommand = new RestartTimerCommand(this);
+            this.VariablesCommand = new VariablesCommand(this);
+            this.VariablesCommand = new VariablesCommand(this);
+            this.TimerCommand = new TimerCommand(this);
+            this.TimerCommand = new TimerCommand(this);
+            this.TimerCommand = new TimerCommand(this);
         }
 
         private void InitializeVM(ref TextBlockVM textBlockVM, ref GraphCanvasVM graphCanvasVM)
@@ -68,7 +65,7 @@ namespace PidControllerWpf.ViewModel
             this.GraphCanvasVM = graphCanvasVM;
         }
 
-        private void InitializeModels()
+        private void InitializeModelss()
         {
             float minPv = (float)(Graph2D.MinPvGraph); 
             float maxPv = (float)(Graph2D.MaxPvGraph); 

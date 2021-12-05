@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PidControllerWpf.View"
-        xmlns:vm="clr-namespace:PidControllerWpf.ViewModel"
+        xmlns:local="clr-namespace:PidControllerWpf.Views"
+        xmlns:vm="clr-namespace:PidControllerWpf.ViewModels"
         mc:Ignorable="d">
     <Canvas>
         <TextBlock Text="Configuration" FontSize="15" Height="25" Width="100" 
@@ -59,11 +59,11 @@
             Text="{Binding TextBlockVM.TimeTextBlock, Mode=TwoWay}" 
             Height="25" Width="100"  Canvas.Left="150" Canvas.Top="185" />
 
-        <Button Content="Start" Command="{Binding PidVM.StartTimerCommand}"
-            Height="25" Width="50" Canvas.Left="25" Canvas.Top="210" />
-        <Button Content="Stop" Command="{Binding PidVM.StopTimerCommand}"
-            Height="25" Width="50" Canvas.Left="80" Canvas.Top="210" />
-        <Button Content="Restart" Command="{Binding PidVM.RestartTimerCommand}"
-            Height="25" Width="50" Canvas.Left="135" Canvas.Top="210" />
+        <Button Content="Start" Height="25" Width="50" Canvas.Left="25" Canvas.Top="210"
+            Command="{Binding PidVM.TimerCommand}" CommandParameter="Start" />
+        <Button Content="Stop" Height="25" Width="50" Canvas.Left="80" Canvas.Top="210"
+            Command="{Binding PidVM.TimerCommand}" CommandParameter="Stop" />
+        <Button Content="Restart" Height="25" Width="50" Canvas.Left="135" Canvas.Top="210"
+            Command="{Binding PidVM.TimerCommand}" CommandParameter="Restart" />
     </Canvas>
 </UserControl>
