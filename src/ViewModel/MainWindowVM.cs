@@ -2,29 +2,29 @@ namespace PidControllerWpf.ViewModel
 {
     public class MainWindowVM
     {
-        private PidVM _PidVM;
+        private PidVM pidVM;
         public PidVM PidVM
         {
-            get { return _PidVM; }
+            get { return pidVM; }
         }
 
-        private TextBlockVM _TextBlockVM;
+        private TextBlockVM textBlockVM;
         public TextBlockVM TextBlockVM
         {
-            get { return _TextBlockVM; }
+            get { return textBlockVM; }
         }
 
-        private GraphCanvasVM _GraphCanvasVM;
+        private GraphCanvasVM graphCanvasVM;
         public GraphCanvasVM GraphCanvasVM
         {
-            get { return _GraphCanvasVM; }
+            get { return graphCanvasVM; }
         }
 
         public MainWindowVM()
         {
-            this._TextBlockVM = new TextBlockVM(); 
-            this._GraphCanvasVM = new GraphCanvasVM();
-            this._PidVM = new PidVM(ref _TextBlockVM, ref _GraphCanvasVM); 
+            this.textBlockVM = new TextBlockVM(); 
+            this.graphCanvasVM = new GraphCanvasVM();
+            this.pidVM = new PidVM(ref textBlockVM, ref graphCanvasVM); 
         }
     }
 }

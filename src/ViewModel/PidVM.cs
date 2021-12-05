@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using System.Windows.Threading; 
 using PidControllerWpf.View; 
+using PidControllerWpf.UserControls; 
 using PidControllerWpf.Model; 
 using PidControllerWpf.Commands;
 
@@ -13,10 +14,10 @@ namespace PidControllerWpf.ViewModel
     {
         public DispatcherTimer TimerGraph { get; private set; } = null; 
 
-        public TextBlockVM _TextBlockVM { get; private set; }
-        public GraphCanvasVM _GraphCanvasVM { get; private set; }
+        public TextBlockVM TextBlockVM { get; private set; }
+        public GraphCanvasVM GraphCanvasVM { get; private set; }
         
-        private PidController _PidController { get; set; } = null; 
+        private PidController PidController { get; set; } = null; 
         
         public ICommand ChangeSetpointCommand { get; private set; }
         public ICommand RegulatePvCommand { get; private set; }
@@ -26,20 +27,19 @@ namespace PidControllerWpf.ViewModel
 
         public static double DelaySeconds = 0.1; 
 
-        #region Constructors
-        public PidVM(ref TextBlockVM TextBlockVM, ref GraphCanvasVM GraphCanvasVM)
+        public PidVM(ref TextBlockVM textBlockVM, ref GraphCanvasVM graphCanvasVM)
         {
             try
             {
                 InitializeCommands(); 
-                InitializeVM(ref TextBlockVM, ref GraphCanvasVM); 
+                InitializeVM(ref textBlockVM, ref graphCanvasVM); 
                 InitializeModels(); 
 
                 TimerGraph = new DispatcherTimer(); 
                 TimerGraph.Tick += new System.EventHandler((o, e) => 
                 {
-                    _GraphCanvasVM.Time += DelaySeconds; 
-                    _TextBlockVM.TimeTextBlock = $"{System.Math.Round(_GraphCanvasVM.Time, 3)}"; 
+                    GraphCanvasVM.Time += DelaySeconds; 
+                    TextBlockVM.TimeTextBlock = $"{System.Math.Round(GraphCanvasVM.Time, 3)}"; 
 
                     AdjustPv(); 
                     UpdatePidParams(); 
@@ -48,10 +48,9 @@ namespace PidControllerWpf.ViewModel
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
-        #endregion  // Constructors
 
         #region Initialize instances 
         private void InitializeCommands()
@@ -63,17 +62,17 @@ namespace PidControllerWpf.ViewModel
             this.RestartTimerCommand = new RestartTimerCommand(this);
         }
 
-        private void InitializeVM(ref TextBlockVM TextBlockVM, ref GraphCanvasVM GraphCanvasVM)
+        private void InitializeVM(ref TextBlockVM textBlockVM, ref GraphCanvasVM graphCanvasVM)
         {
-            this._TextBlockVM = TextBlockVM;
-            this._GraphCanvasVM = GraphCanvasVM;
+            this.TextBlockVM = textBlockVM;
+            this.GraphCanvasVM = graphCanvasVM;
         }
 
         private void InitializeModels()
         {
-            float minPv = (float)MainWindow.MinPvGraph; 
-            float maxPv = (float)MainWindow.MaxPvGraph; 
-            _PidController = new PidController(minPv, maxPv); 
+            float minPv = (float)(Graph2D.MinPvGraph); 
+            float maxPv = (float)(Graph2D.MaxPvGraph); 
+            PidController = new PidController(minPv, maxPv); 
         }
         #endregion  // Initialize instances 
 
@@ -90,7 +89,7 @@ namespace PidControllerWpf.ViewModel
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
 
@@ -106,7 +105,7 @@ namespace PidControllerWpf.ViewModel
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
         #endregion  // Change variables 
@@ -114,57 +113,57 @@ namespace PidControllerWpf.ViewModel
         #region Methods
         private void GetSpFromTextBox(ref double value)
         {
-            value = System.Convert.ToSingle(_TextBlockVM.SetPointTextBlock);
+            value = System.Convert.ToSingle(TextBlockVM.SetPointTextBlock);
         }
 
         private void GetPvFromTextBox(ref double value)
         {
-            value = System.Convert.ToSingle(_TextBlockVM.ProcessVariableTextBlock);
+            value = System.Convert.ToSingle(TextBlockVM.ProcessVariableTextBlock);
         }
 
         private void SetBoundsForValue(ref double value)
         {
-            if (value > MainWindow.MaxPvGraph)
+            if (value > Graph2D.MaxPvGraph)
             {
-                value = MainWindow.MaxPvGraph;
+                value = Graph2D.MaxPvGraph;
             }
-            else if (value < MainWindow.MinPvGraph)
+            else if (value < Graph2D.MinPvGraph)
             {
-                value = MainWindow.MinPvGraph;
+                value = Graph2D.MinPvGraph;
             }
         }
 
         private void AdjustPv()
         {
-            float pv = (float)_GraphCanvasVM.ProcessVariable; 
-            float sp = (float)_GraphCanvasVM.Setpoint; 
+            float pv = (float)GraphCanvasVM.ProcessVariable; 
+            float sp = (float)GraphCanvasVM.Setpoint; 
 
-            _PidController.ControlPv(ref pv, sp, TimerGraph.Interval); 
+            PidController.ControlPv(ref pv, sp, TimerGraph.Interval); 
 
-            _TextBlockVM.ProcessVariableTextBlock = $"{pv}"; 
-            _GraphCanvasVM.ProcessVariable = (double)pv;
+            TextBlockVM.ProcessVariableTextBlock = pv.ToString(); 
+            GraphCanvasVM.ProcessVariable = (double)pv;
         }
         #endregion  // Methods
 
         #region Updating 
         private void UpdateSpOnGraph(double value)
         {
-            _TextBlockVM.SetPointTextBlock = $"{value}"; 
-            _GraphCanvasVM.Setpoint = value;
+            TextBlockVM.SetPointTextBlock = value.ToString(); 
+            GraphCanvasVM.Setpoint = value;
         }
 
         private void UpdatePvOnGraph(double value)
         {
-            _TextBlockVM.ProcessVariableTextBlock = $"{value}"; 
-            _GraphCanvasVM.ProcessVariable = value;
+            TextBlockVM.ProcessVariableTextBlock = value.ToString(); 
+            GraphCanvasVM.ProcessVariable = value;
         }
 
         private void UpdatePidParams()
         {
-            _TextBlockVM.IntegralErrorTextBlock = $"{_PidController.IntegralTerm}"; 
-            _TextBlockVM.ProptionalGainTextBlock = $"{_PidController.ProportionalGain}"; 
-            _TextBlockVM.IntegralGainTextBlock = $"{_PidController.IntegralGain}"; 
-            _TextBlockVM.DerivativeGainTextBlock = $"{_PidController.DerivativeGain}"; 
+            TextBlockVM.IntegralErrorTextBlock = PidController.IntegralTerm.ToString(); 
+            TextBlockVM.ProptionalGainTextBlock = PidController.ProportionalGain.ToString(); 
+            TextBlockVM.IntegralGainTextBlock = PidController.IntegralGain.ToString(); 
+            TextBlockVM.DerivativeGainTextBlock = PidController.DerivativeGain.ToString(); 
         }
         #endregion  // Updating 
     }

@@ -6,16 +6,12 @@ namespace PidControllerWpf.Commands
 {
     class StopTimerCommand : ICommand
     {
-        #region Members
-        private PidVM _PidVM; 
-        #endregion  // Members
+        private PidVM PidVM; 
 
-        #region Constructor
-        public StopTimerCommand(PidVM PidVM)
+        public StopTimerCommand(PidVM pidVM)
         {
-            this._PidVM = PidVM; 
+            this.PidVM = pidVM; 
         }
-        #endregion  // Constructor
 
         public event System.EventHandler CanExecuteChanged; 
         
@@ -28,13 +24,8 @@ namespace PidControllerWpf.Commands
         {
             try
             {
-                // Stop timer 
-                this._PidVM.TimerGraph.Stop(); 
-                
-                // Assign `_GraphCanvasVM` as `gcvm` for convinience 
-                GraphCanvasVM gcvm = this._PidVM._GraphCanvasVM; 
-
-                // Say that timer is not enabled 
+                this.PidVM.TimerGraph.Stop(); 
+                GraphCanvasVM gcvm = this.PidVM.GraphCanvasVM; 
                 gcvm.IsTimerEnabled = false; 
 
                 // Set reference point to be able to change SP while timer isn't enabled
@@ -43,7 +34,7 @@ namespace PidControllerWpf.Commands
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
     }

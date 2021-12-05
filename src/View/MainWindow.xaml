@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PidControllerWpf.View"
         xmlns:vm="clr-namespace:PidControllerWpf.ViewModel"
+        xmlns:uc="clr-namespace:PidControllerWpf.UserControls"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="PID Controller" 
@@ -44,157 +45,15 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!--Menu-->
-        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <MenuItem Header="File">
-                <MenuItem Header="New" />
-                <MenuItem Header="Open" />
-                <Separator />
-                <MenuItem Header="Save" />
-                <MenuItem Header="Save All" />
-                <Separator />
-                <MenuItem Header="Close" />
-                <MenuItem Header="Close All" />
-                <Separator />
-                <MenuItem Header="Exit" />
-            </MenuItem>
-            <MenuItem Header="Edit">
-                <MenuItem Header="Undo" />
-                <MenuItem Header="Redo" />
-                <Separator />
-                <MenuItem Header="Settings" />
-            </MenuItem>
-            <MenuItem Header="Help">
-                <MenuItem Header="Docs">
-                    <MenuItem Header="About" />
-                    <MenuItem Header="How to use" />
-                    <MenuItem Header="For developers" />
-                </MenuItem>
-                <MenuItem Header="GitHub repository" />
-            </MenuItem>
-        </Menu>
+        <uc:Menu x:Name="Menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
 
-        <!--Configuration-->
         <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="0" Grid.Row="1"/>
-        <Canvas Name="Configuration" Grid.Row="1" Grid.Column="0" >
-            <TextBlock Text="Configuration" FontSize="15" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="10" />
+        <uc:Configuration x:Name="Configuration" Grid.Row="1" Grid.Column="0" />
 
-            <!--Set point info-->
-            <TextBlock Text="Set point:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="35" />
-            <TextBlock Name="SetPoint" 
-                Text="{Binding TextBlockVM.SetPointTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100" Canvas.Left="150" Canvas.Top="35" />
-
-            <!--Process variable info-->
-            <TextBlock Text="Process variable:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="60" />
-            <TextBlock Name="ProcessVariable" 
-                Text="{Binding TextBlockVM.ProcessVariableTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100" Canvas.Left="150" Canvas.Top="60" />
-
-            <!--Integral error info-->
-            <TextBlock Text="Integral error:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="85" />
-            <TextBlock Name="IntegralError" 
-                Text="{Binding TextBlockVM.IntegralErrorTextBlock, Mode=TwoWay}" 
-                Height="25"  Width="100" Canvas.Left="150" Canvas.Top="85" />
-            
-            <!--Proportional gain info-->
-            <TextBlock Text="Proportional gain:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="110" />
-            <TextBlock Name="ProportionalGain" 
-                Text="{Binding TextBlockVM.ProptionalGainTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100" Canvas.Left="150" Canvas.Top="110" />
-
-            <!--Integral gain info-->
-            <TextBlock Text="Integral gain:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="135" />
-            <TextBlock Name="IntegralGain" 
-                Text="{Binding TextBlockVM.IntegralGainTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100" Canvas.Left="150" Canvas.Top="135" />
-
-            <!--Derivative gain info-->
-            <TextBlock Text="Derivative gain:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="160" />
-            <TextBlock Name="DerivativeGain" 
-                Text="{Binding TextBlockVM.DerivativeGainTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100" Canvas.Left="150" Canvas.Top="160" />
-
-            <!--Time info-->
-            <TextBlock Text="Time:" Height="25" Width="100" 
-                Canvas.Left="25" Canvas.Top="185" />
-            <TextBlock Name="Time" 
-                Text="{Binding TextBlockVM.TimeTextBlock, Mode=TwoWay}" 
-                Height="25" Width="100"  Canvas.Left="150" Canvas.Top="185" />
-
-            <Button Content="Start" Command="{Binding PidVM.StartTimerCommand}"
-                Height="25" Width="50" Canvas.Left="25" Canvas.Top="210" />
-            <Button Content="Stop" Command="{Binding PidVM.StopTimerCommand}"
-                Height="25" Width="50" Canvas.Left="80" Canvas.Top="210" />
-            <Button Content="Restart" Command="{Binding PidVM.RestartTimerCommand}"
-                Height="25" Width="50" Canvas.Left="135" Canvas.Top="210" />
-        </Canvas>
-
-        <!--Keyboard shortcuts-->
         <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="0" Grid.Row="2"/>
-        <Canvas Name="KeyboardShortcuts" Grid.Column="0" Grid.Row="2">
-            <Label Content="Keyboard shortcuts" Canvas.Left="10" Canvas.Top="10" />
-            <Label Content="W - Increase setpoint" Canvas.Left="10" Canvas.Top="35" />
-            <Label Content="S - Decrease setpoint" Canvas.Left="10" Canvas.Top="60" />
-        </Canvas>
+        <uc:KeyboardShortcuts x:Name="KeyboardShortcuts" Grid.Column="0" Grid.Row="2" Margin="10,5,0,0" />
 
-        <!--Area around the graph-->
         <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
-        <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="25" />
-            </Grid.ColumnDefinitions>
-
-            <Canvas Name="ProcessVariableCanvas" Grid.Row="1" Grid.Column="0">
-                <Label Name="ValueLabel" Content="Value">
-                    <Label.LayoutTransform>
-                        <RotateTransform Angle="-90" />
-                    </Label.LayoutTransform>
-                </Label>
-            </Canvas>
-
-            <Canvas Name="TimeValuesCanvas" Grid.Row="2" Grid.Column="1" >
-                <Label Name="TimeLabel" Content="Time" />
-            </Canvas>
-
-            <!--Graph canvas-->
-            <Border BorderThickness="0.5" BorderBrush="Black" Grid.Column="1" Grid.Row="1"/>
-            <Canvas Name="GraphCanvas" Grid.Row="1" Grid.Column="1" >
-                
-                <!--Process variable ellipse-->
-                <Ellipse Width="5" Height="5" Fill="Blue" x:Uid="ProcessVariableEllipse">
-                    <Ellipse.RenderTransform>
-                        <TransformGroup>
-                            <TranslateTransform X="{Binding GraphCanvasVM.ProcessVariableLeft, Mode=OneWay}" 
-                                Y="{Binding GraphCanvasVM.ProcessVariableTop, Mode=OneWay}" />
-                        </TransformGroup>
-                    </Ellipse.RenderTransform>
-                </Ellipse>
-                
-                <!--Setpoint ellipse-->
-                <Ellipse Width="5" Height="5" Fill="Red" x:Uid="SetpointEllipse">
-                    <Ellipse.RenderTransform>
-                        <TransformGroup>
-                            <TranslateTransform X="{Binding GraphCanvasVM.SetpointLeft, Mode=OneWay}" 
-                                Y="{Binding GraphCanvasVM.SetpointTop, Mode=OneWay}" />
-                        </TransformGroup>
-                    </Ellipse.RenderTransform>
-                </Ellipse>
-            </Canvas>
-        </Grid>
+        <uc:Graph2D x:Name="Graph2D" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" />
     </Grid>
 </Window>

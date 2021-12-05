@@ -5,16 +5,12 @@ namespace PidControllerWpf.Commands
 {
     public class StartTimerCommand : ICommand 
     {
-        #region Members
-        private PidVM _PidVM; 
-        #endregion  // Members
+        private PidVM PidVM { get; set; } 
 
-        #region Constructor
-        public StartTimerCommand(PidVM PidVM)
+        public StartTimerCommand(PidVM pidVM)
         {
-            this._PidVM = PidVM; 
+            this.PidVM = pidVM; 
         }
-        #endregion  // Constructor
 
         public event System.EventHandler CanExecuteChanged; 
         
@@ -27,12 +23,12 @@ namespace PidControllerWpf.Commands
         {
             try
             {
-                this._PidVM.TimerGraph.Start(); 
-                this._PidVM._GraphCanvasVM.IsTimerEnabled = true; 
+                this.PidVM.TimerGraph.Start(); 
+                this.PidVM.GraphCanvasVM.IsTimerEnabled = true; 
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
     }

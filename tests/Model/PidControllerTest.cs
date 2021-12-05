@@ -5,7 +5,7 @@ namespace Test.PidControllerWpf.Model
 {
     public class PidControllerTest
     {
-        private PidController _PidController = null; 
+        private PidController PidController = null; 
 
         private float MinValue { get; set; } = 0; 
         private float MaxValue { get; set; } = 0; 
@@ -17,7 +17,7 @@ namespace Test.PidControllerWpf.Model
         {
             MinValue = -10; 
             MinValue = 50; 
-            _PidController = new PidController(MinValue, MaxValue); 
+            PidController = new PidController(MinValue, MaxValue); 
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Test.PidControllerWpf.Model
             float setpoint = 32.0f; 
 
             // Act 
-            _PidController.ControlPv(ref pv, setpoint, DeltaTime); 
+            PidController.ControlPv(ref pv, setpoint, DeltaTime); 
 
             // Assert 
             Assert.AreEqual(pvExpected, pv, 0.0f); 

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Shapes;
 using PidControllerWpf.View; 
+using PidControllerWpf.UserControls; 
 
 namespace PidControllerWpf.ViewModel
 {
@@ -59,9 +60,9 @@ namespace PidControllerWpf.ViewModel
             { 
                 this.DrawVariable(ref value, false, true); 
 
-                MainWindow.DrawCoordinates(); 
-                MainWindow.DrawLine(SetpointLines);
-                MainWindow.DrawLine(ProcessVarLines);
+                Graph2D.DrawCoordinates(); 
+                Graph2D.DrawLine(SetpointLines);
+                Graph2D.DrawLine(ProcessVarLines);
                 
                 processVariable = value; 
             }
@@ -107,9 +108,9 @@ namespace PidControllerWpf.ViewModel
             {
                 this.DrawVariable(ref value, true, false); 
 
-                MainWindow.DrawCoordinates(); 
-                MainWindow.DrawLine(SetpointLines);
-                MainWindow.DrawLine(ProcessVarLines);
+                Graph2D.DrawCoordinates(); 
+                Graph2D.DrawLine(SetpointLines);
+                Graph2D.DrawLine(ProcessVarLines);
                 
                 setpoint = value; 
             }
@@ -173,13 +174,13 @@ namespace PidControllerWpf.ViewModel
         {
             SetpointLines.Clear(); 
             ProcessVarLines.Clear(); 
-            MainWindow.DrawCoordinates(); 
+            Graph2D.DrawCoordinates(); 
         }
 
         private void DrawVariable(ref double value, bool isSetpoint, bool isPv)
         {
-            double min = MainWindow.MinPvGraph; 
-            double max = MainWindow.MaxPvGraph; 
+            double min = Graph2D.MinPvGraph; 
+            double max = Graph2D.MaxPvGraph; 
 
             double varLeft = 0; 
             double varTop = 0; 
@@ -201,7 +202,7 @@ namespace PidControllerWpf.ViewModel
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}"); 
+                System.Windows.MessageBox.Show(e.Message, "Exception"); 
             }
 
             ReassignVariable(isSetpoint, isPv, varLeft, varTop, referencePoint, lines); 
@@ -216,7 +217,7 @@ namespace PidControllerWpf.ViewModel
             line.X1 = varLeft; 
             line.Y1 = varTop + 2.5;     // Little shift to bottom, radius of a point is 5. 
 
-            varTop = MainWindow.GraphHeight - (value * MainWindow.GraphHeight / max) - 2.5; 
+            varTop = Graph2D.GraphHeight - (value * Graph2D.GraphHeight / max) - 2.5; 
             
             line.X2 = varLeft; 
             line.Y2 = varTop + 2.5;     // Little shift to bottom, radius of a point is 5. 
@@ -388,8 +389,8 @@ namespace PidControllerWpf.ViewModel
         #region Time methods 
         private void SetTime(ref double value)
         {
-            double tmin = MainWindow.MinTimeGraph; 
-            double tmax = MainWindow.MaxTimeGraph; 
+            double tmin = Graph2D.MinTimeGraph; 
+            double tmax = Graph2D.MaxTimeGraph; 
 
             if (value < tmin)
             {
@@ -397,8 +398,8 @@ namespace PidControllerWpf.ViewModel
             }
             else if (value > tmax - 1)  
             {
-                MainWindow.MinTimeGraph += 1;
-                MainWindow.MaxTimeGraph += 1;
+                Graph2D.MinTimeGraph += 1;
+                Graph2D.MaxTimeGraph += 1;
                 MoveAxisTimeIncreased(tmin, tmax); 
             }
             else 
@@ -415,13 +416,13 @@ namespace PidControllerWpf.ViewModel
                 MovePointsLeft(tmin, tmax); 
                 RemoveLinesOutOfRange(); 
                 
-                MainWindow.DrawCoordinates(); 
-                MainWindow.DrawLine(SetpointLines); 
-                MainWindow.DrawLine(ProcessVarLines); 
+                Graph2D.DrawCoordinates(); 
+                Graph2D.DrawLine(SetpointLines); 
+                Graph2D.DrawLine(ProcessVarLines); 
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
 
@@ -429,20 +430,20 @@ namespace PidControllerWpf.ViewModel
         {
             foreach (var line in SetpointLines)
             {
-                line.X1 -= MainWindow.GraphWidth / (tmax - tmin); 
-                line.X2 -= MainWindow.GraphWidth / (tmax - tmin); 
+                line.X1 -= Graph2D.GraphWidth / (tmax - tmin); 
+                line.X2 -= Graph2D.GraphWidth / (tmax - tmin); 
             }
             foreach (var line in ProcessVarLines)
             {
-                line.X1 -= MainWindow.GraphWidth / (tmax - tmin); 
-                line.X2 -= MainWindow.GraphWidth / (tmax - tmin); 
+                line.X1 -= Graph2D.GraphWidth / (tmax - tmin); 
+                line.X2 -= Graph2D.GraphWidth / (tmax - tmin); 
             }
         }
 
         private void MovePointsLeft(double tmin, double tmax)
         {
-            this.SetpointLeft -= MainWindow.GraphWidth / (tmax - tmin); 
-            this.ProcessVariableLeft -= MainWindow.GraphWidth / (tmax - tmin); 
+            this.SetpointLeft -= Graph2D.GraphWidth / (tmax - tmin); 
+            this.ProcessVariableLeft -= Graph2D.GraphWidth / (tmax - tmin); 
         }
 
         private void RemoveLinesOutOfRange()
@@ -472,12 +473,12 @@ namespace PidControllerWpf.ViewModel
 
                 SetpointLines.Add(lineSp); 
                 ProcessVarLines.Add(linePv); 
-                MainWindow.DrawLine(lineSp); 
-                MainWindow.DrawLine(linePv); 
+                Graph2D.DrawLine(lineSp); 
+                Graph2D.DrawLine(linePv); 
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
 
@@ -489,7 +490,7 @@ namespace PidControllerWpf.ViewModel
 
             lineSp.X1 = this.SetpointLeft; 
             lineSp.Y1 = this.SetpointTop + 2.5; 
-            this.SetpointLeft = ((value - tmin) * MainWindow.GraphWidth / (tmax - tmin)) - 2.5; 
+            this.SetpointLeft = ((value - tmin) * Graph2D.GraphWidth / (tmax - tmin)) - 2.5; 
             lineSp.X2 = this.SetpointLeft; 
             lineSp.Y2 = this.SetpointTop + 2.5; 
             
@@ -505,7 +506,7 @@ namespace PidControllerWpf.ViewModel
 
             linePv.X1 = this.ProcessVariableLeft; 
             linePv.Y1 = this.ProcessVariableTop + 2.5; 
-            this.ProcessVariableLeft = ((value - tmin) * MainWindow.GraphWidth / (tmax - tmin)) - 2.5; 
+            this.ProcessVariableLeft = ((value - tmin) * Graph2D.GraphWidth / (tmax - tmin)) - 2.5; 
             linePv.X2 = this.ProcessVariableLeft; 
             linePv.Y2 = this.ProcessVariableTop + 2.5; 
 

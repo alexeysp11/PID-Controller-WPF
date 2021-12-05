@@ -1,22 +1,19 @@
 using System.Windows; 
 using System.Windows.Input; 
 using PidControllerWpf.View; 
+using PidControllerWpf.UserControls; 
 using PidControllerWpf.ViewModel; 
 
 namespace PidControllerWpf.Commands
 {
     class RestartTimerCommand : ICommand
     {
-        #region Members
-        private PidVM _PidVM; 
-        #endregion  // Members
+        private PidVM PidVM { get; set; } 
 
-        #region Constructor
         public RestartTimerCommand(PidVM PidVM)
         {
-            this._PidVM = PidVM; 
+            this.PidVM = PidVM; 
         }
-        #endregion  // Constructor
 
         public event System.EventHandler CanExecuteChanged; 
         
@@ -29,41 +26,32 @@ namespace PidControllerWpf.Commands
         {
             try
             {
-                // Stop timer 
-                this._PidVM.TimerGraph.Stop(); 
+                this.PidVM.TimerGraph.Stop(); 
                 
-                // Assign `_GraphCanvasVM` as `gcvm` for convinience 
-                GraphCanvasVM gcvm = this._PidVM._GraphCanvasVM; 
-
-                // Say that timer is not enabled 
+                GraphCanvasVM gcvm = this.PidVM.GraphCanvasVM; 
                 gcvm.IsTimerEnabled = false; 
 
-                // Set size of a window
-                MainWindow.MinTimeGraph = MainWindow.InitMinTimeGraph; 
-                MainWindow.MaxTimeGraph = MainWindow.InitMaxTimeGraph; 
+                Graph2D.MinTimeGraph = Graph2D.InitMinTimeGraph; 
+                Graph2D.MaxTimeGraph = Graph2D.InitMaxTimeGraph; 
 
-                // Set SP to zero 
                 gcvm.Setpoint = 0; 
-                _PidVM._TextBlockVM.SetPointTextBlock = $"{gcvm.Setpoint}"; 
+                PidVM.TextBlockVM.SetPointTextBlock = gcvm.Setpoint.ToString(); 
                 
-                // Set PV to zero 
                 gcvm.ProcessVariable = 0; 
-                _PidVM._TextBlockVM.ProcessVariableTextBlock = $"{gcvm.ProcessVariable}"; 
+                PidVM.TextBlockVM.ProcessVariableTextBlock = gcvm.ProcessVariable.ToString(); 
 
-                // Set time to zero
                 gcvm.Time = 0; 
-                _PidVM._TextBlockVM.TimeTextBlock = $"{gcvm.Time}";
+                PidVM.TextBlockVM.TimeTextBlock = gcvm.Time.ToString();
 
                 // Set reference point to be able to change SP while timer isn't enabled
                 Point refpoint = new Point(gcvm.SetpointLeft, gcvm.SetpointTop + 2.5); 
                 gcvm.SpRefPoint = refpoint; 
 
-                // Clear list of lines 
                 gcvm.ClearListOfLines(); 
             }
             catch (System.Exception e)
             {
-                System.Windows.MessageBox.Show($"Exception: {e}", "Exception");
+                System.Windows.MessageBox.Show(e.Message, "Exception");
             }
         }
     }

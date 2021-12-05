@@ -6,11 +6,11 @@ namespace PidControllerWpf.Commands
 {
     public class RegulatePvCommand : ICommand
     {
-        public PidVM _PidVM { get; set; }
+        public PidVM PidVM { get; set; }
 
-        public RegulatePvCommand(PidVM PidVM)
+        public RegulatePvCommand(PidVM pidVM)
         {
-            this._PidVM = PidVM; 
+            this.PidVM = pidVM; 
         }
 
         public event EventHandler CanExecuteChanged; 
@@ -28,7 +28,7 @@ namespace PidControllerWpf.Commands
             {
                 pvDelta = -pvDelta; 
             }
-            this._PidVM.ChangeProcessVariable(pvDelta);
+            this.PidVM.ChangeProcessVariable(pvDelta);
         }
     }
 }
