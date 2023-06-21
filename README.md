@@ -1,5 +1,7 @@
 # PID-Controller-WPF
 
+Read this in other languages: [English](README.md), [Russian/Русский](README.ru.md). 
+
 Application `PID-Controller-WPF` is designed to simulate a **PID controller** in order to regulate *process variable* depending on *setpoint*. 
 
 For example, if you need to ensure that the *real speed of a vehicle* is consistent with the value of a *desired speed*, then the application `PID-Controller-WPF` can be useful when selecting the parameters of the **PID controller**.
