@@ -8,7 +8,7 @@ For example, if you need to ensure that the *real speed of a vehicle* is consist
 
 This app is written in `C#` programming language using **MVVM** pattern. 
 
-![MainWindow](Docs/img/Usage/MainWindow.png)
+![MainWindow](docs/img/Usage/MainWindow.png)
 
 ## Code snippets 
 

@@ -8,7 +8,7 @@
 
 Приложение написано с использованием подхода **MVVM**. 
 
-![MainWindow](img/Usage/MainWindow.png)
+![MainWindow](docs/img/Usage/MainWindow.png)
 
 ## Отрывки кода 
 
