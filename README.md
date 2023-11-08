@@ -1,14 +1,34 @@
 # PID-Controller-WPF
 
-Read this in other languages: [English](README.md), [Russian/Русский](README.ru.md). 
+[English](README.md) | [Русский](README.ru.md)
 
-Application `PID-Controller-WPF` is designed to simulate a **PID controller** in order to regulate *process variable* depending on *setpoint*. 
+`PID-Controller-WPF` is the project that involves creating a software application that provides a simulation environment for testing and optimizing PID controller parameters for various control systems.
+
+## Overall description
+
+This project is designed to simulate a **PID controller** in order to regulate *process variable* depending on *setpoint*. 
 
 For example, if you need to ensure that the *real speed of a vehicle* is consistent with the value of a *desired speed*, then the application `PID-Controller-WPF` can be useful when selecting the parameters of the **PID controller**.
 
 This app is written in `C#` programming language using **MVVM** pattern. 
 
 ![MainWindow](docs/img/Usage/MainWindow.png)
+
+### Goal
+
+The goal of the project is to create a software application that simulates a PID controller to regulate a process variable depending on a setpoint.
+
+### Scope
+
+The scope of the project includes developing a WPF application in C# using the MVVM pattern to simulate a PID controller and allow for the selection of controller parameters for specific applications.
+
+### Who can use this project
+
+This project can be used by engineers, researchers, or anyone involved in process control and automation who needs to optimize PID controller parameters for different systems.
+
+### Possible limitations
+
+Possible limitations of this project could include challenges in accurately modeling complex control systems, potential limitations in the scope of control system applications that can be simulated, and the need for extensive testing to ensure the accuracy and reliability of the simulated PID controller.
 
 ## Code snippets 
 
